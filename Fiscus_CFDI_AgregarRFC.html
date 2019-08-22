@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Interfaz para dar de alta un RFC por medio de la API de Fiscus CFDI">
+    <meta name="keywords" content="Facturación, SAT, México, API">
+    <meta name="author" content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Agregar RFC</title>
+    <style type="text/css">
+        input,
+        select,
+        button {
+            display: block;
+            width: 200px;
+            height: 30px;
+            margin: 0 auto;
+        }
+
+        img {
+            width: 100px;
+            border-radius: 50px;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="img/fiscus_cfdi.png"><br>
+
+    <!-- Información Requerida para dar de alta un RFC (persona moral/persona física -->
+    <input type="text" maxlength="13" id="rfc" placeholder="RFC que dará de alta" value="" required>
+    <input type="text" maxlength="200" id="razon_social" placeholder="Razón Social que dará de alta" value="" required>
+    <input type="file" id="certificado_key" value="" required accept=".key">
+    <input type="file" id="certificado_cer" value="" required accept=".cer">
+    <input type="password" maxlength="200" id="certificado_password" placeholder="Contraseña del certificado de sello digital" value="" required>
+
+
+    <!-- Información Opcional para dar de alta un RFC (persona moral/persona física -->
+    <input type="text" maxlength="18" id="curp" placeholder="Curp de la persona física" value=""><!-- El curp solo aplica si el RFC pertenece a una persona física -->
+    <input type="text" maxlength="20" id="registro_patronal" placeholder="Registro Patronal del RFC" value=""> <!-- Para poder timbrar nóminas -->
+    <input type="file" id="logotipo" value="" accept="image/x-png,image/gif,image/jpeg">
+    <input type="text" maxlength="200" id="nombre_comercial" placeholder="Nombre comercial del RFC" value="">
+    <input type="text" maxlength="5" id="codigo_postal" placeholder="Código Postal del RFC" value="">
+    <select id="zona_horaria">
+        <option value="America/Mexico_City">America/Mexico_City</option>
+        <option value="America/Monterrey">America/Monterrey</option>
+        <option value="America/Tijuana">America/Tijuana</option>
+        <option value="America/Mazatlan">America/Mazatlan</option>
+    </select>
+    <br>
+    <button id="agregar_rfc_btn"> Dar de alta </button>
+
+    <script type="text/javascript" src="js/consumo_api.js"></script>
+    <script type="text/javascript">
+        (function () {
+            var altaRfc=new AltaRfc();
+        })();
+    </script>
+</body>
+
+</html>
