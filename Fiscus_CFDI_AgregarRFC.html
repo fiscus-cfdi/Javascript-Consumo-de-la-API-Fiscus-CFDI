@@ -8,23 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Agregar RFC</title>
-    <style type="text/css">
-        input,
-        select,
-        button {
-            display: block;
-            width: 200px;
-            height: 30px;
-            margin: 0 auto;
-        }
-
-        img {
-            width: 100px;
-            border-radius: 50px;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
 </head>
 
 <body>
@@ -54,9 +38,16 @@
     <button id="agregar_rfc_btn"> Dar de alta </button>
 
     <script type="text/javascript" src="js/consumo_api.js"></script>
+    <script type="text/javascript" src="js/agregar_rfc.js"></script>
     <script type="text/javascript">
         (function () {
+            var consumo_api=new ComsumirApi();
+            consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+            consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+
             var altaRfc=new AltaRfc();
+            altaRfc.setAmbiente("sandbox");
+            altaRfc.setConsumirApi(consumo_api);
         })();
     </script>
 </body>
