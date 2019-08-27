@@ -69,4 +69,8 @@ Para cancelar un CFDI, primero tuvo que haber sido timbrado en la plataforma de 
 
 
 
-  
+# DOCUMENTACIÓN
+
+Para mayor detalle de cada método y cómo implementarlo en otro lenguaje de programación, ingrese a la documentación de la API
+
+* https://www.fiscuscfdi.com/API_Facturacion/docs/
