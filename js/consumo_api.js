@@ -116,10 +116,30 @@ class ComsumirApi
             callback(e);
         });
     }
-    api_cancelar_cfdi()
+    /**
+     * Description. Método para cancelar un CFDI en Fiscus CFDI, mediante la API
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-08-27
+     * @param  {object} cancelar objeto con los valores requeridos/opcionales para cancelar un CFDI, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+     * @param {function} callback donde regresará el control
+     * @return {void}
+    **/
+    api_cancelar_cfdi(cancelar, callback)
     {
-        
+        this.api_obtener_token((token)=>{
+            
+            cancelar["token"]=token;
+            console.log(cancelar);
+            var credenciales = this.convertir_parametros_post(cancelar);
+            this.peticion_servidor(this.#url+"api_cancelar_cfdi",credenciales,(datos)=>{
+                console.log(datos);
+                callback(datos);
+            });
+        },(e)=>{
+            callback(e);
+        });
     }
+
     /**
      * Description. Método genérico para realiza las peticiones al servidor, utilizado por los métodos de api_obtener_token(), api_agregar_rfc(), api_timbrar_cfdi() & api_cancelar_cfdi(), recibe 3 parámetros; la url, las variables POST y una función callback 
      * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
