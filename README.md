@@ -49,10 +49,10 @@ Para poder timbrar un CFDI, primero debe dar de alta un RFC. El ejemplo para tim
     var consumo_api=new ComsumirApi();
     consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
     consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
-	
-	var timbrarCfdi=new TimbrarCFDI();
-	timbrarCfdi.setAmbiente("sandbox");
-	timbrarCfdi.setConsumirApi(consumo_api);
+    
+    var timbrarCfdi=new TimbrarCFDI();
+    timbrarCfdi.setAmbiente("sandbox");
+    timbrarCfdi.setConsumirApi(consumo_api);
 ```
 
 ## Cancelar CFDI
@@ -61,10 +61,10 @@ Para cancelar un CFDI, primero tuvo que haber sido timbrado en la plataforma de 
     var consumo_api=new ComsumirApi();
     consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
     consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
-
-	var cancelarCFDI=new CancelarCFDI();
-	cancelarCFDI.setAmbiente("sandbox");
-	cancelarCFDI.setConsumirApi(consumo_api);
+    
+    var cancelarCFDI=new CancelarCFDI();
+    cancelarCFDI.setAmbiente("sandbox");
+    cancelarCFDI.setConsumirApi(consumo_api);
 ```
 
 
