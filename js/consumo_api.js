@@ -139,6 +139,68 @@ class ComsumirApi
             callback(e);
         });
     }
+    /**
+     * Description. Modo para obtener las series asociadas a un RFC en Fiscus CFDI
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-10-08
+     * @param  {object} series objeto con los valores requeridos/opcionales para obtener las series de un RFC, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+     * @param {function} callback donde regresará el control
+     * @return {void}
+    **/
+    api_obtener_series(series, callback)
+    {
+        this.api_obtener_token((token)=>{
+            
+            series["token"]=token;
+            console.log(series);
+            var credenciales = this.convertir_parametros_post(series);
+            this.peticion_servidor(this.#url+"api_obtener_numeros_series",credenciales,(datos)=>{
+                console.log(datos);
+                callback(datos);
+            });
+        },(e)=>{
+            callback(e);
+        });
+    }
+
+
+    api_agregar_cuenta(cuenta, callback) {
+        this.api_obtener_token((token) => {
+            cuenta["token"] = token;
+            console.log(cuenta);
+            var credenciales = this.convertir_parametros_post(cuenta);
+            this.peticion_servidor(this.#url+"api_agregar_cuenta", credenciales, (datos) => {
+                console.log(datos);
+                callback(datos);
+            });
+        }, (e) => {
+            callback(e);
+        });
+    }
+    /**
+     * Description. Guarda un JSON representativo del CFDI al que solo se le omitirían los datos del receptor. Este JSON será validado y guardado para su futura facturación
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-08-26
+     * @param  {object} ticket objeto con los valores requeridos/opcionales para crear un ticket, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+     * @param {function} callback donde regresará el control
+     * @return {void}
+    **/
+    api_guardar_ticket(ticket, callback)
+    {
+        this.api_obtener_token((token)=>{
+
+            ticket["token"]=token;
+            console.log(ticket);
+            var credenciales = this.convertir_parametros_post(ticket);
+            this.peticion_servidor(this.#url+"api_guardar_ticket",credenciales,(datos)=>{
+                console.log(datos);
+                callback(datos);
+            });
+        },(e)=>{
+            callback(e);
+        });
+    }
+
 
     /**
      * Description. Método genérico para realiza las peticiones al servidor, utilizado por los métodos de api_obtener_token(), api_agregar_rfc(), api_timbrar_cfdi() & api_cancelar_cfdi(), recibe 3 parámetros; la url, las variables POST y una función callback 
