@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Interfaz para obtener el estatus de un TICKET por medio de la API de Fiscus CFDI">
+    <meta name="keywords" content="Facturación, SAT, México, API">
+    <meta name="author" content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Estatus TICKET</title>
+    <link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
+</head>
+
+<body>
+    <img src="img/fiscus_cfdi.png"><br>
+
+    <input type="text" maxlength="50" id="serie" placeholder="Serie" value="" required><br>
+    <input type="text" maxlength="50" id="ticket" placeholder="Ticket" value="" required><br>
+    <button id="estatus_ticket_btn"> Obtener Estatus</button>
+
+    <script type="text/javascript" src="js/consumo_api.js"></script>
+    <script type="text/javascript" src="js/estatus_ticket.js"></script>
+    <script type="text/javascript">
+        (function () {
+            var consumo_api=new ComsumirApi();
+            consumo_api.setUsuario("asistente_facturacion");
+            consumo_api.setPassword("asistente_facturacion");
+
+            var estatusTicket=new EstatusTicket();
+            estatusTicket.setConsumirApi(consumo_api);
+        })();
+    </script>
+</body>
+
+</html>
