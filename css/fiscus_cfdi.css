@@ -1,0 +1,54 @@
+input,
+select,
+button {
+    display: block;
+    width: 200px;
+    height: 30px;
+    margin: 0 auto;
+}
+img {
+    width: 100px;
+    border-radius: 50px;
+    display: block;
+    margin: 0 auto;
+}
+#emisor_receptor
+{
+    display:flex;
+    margin:0 auto;
+    width:700px;
+}
+#emisor_receptor > div
+{
+    flex:auto;
+}
+table, td, th
+{
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin:0 auto;
+}
+td > input, td > select
+{
+    width:110px!important;
+    height: 20px;
+}
+#agregar_concepto
+{
+    display:block;
+    margin-left:0px;
+}
+#descarga
+{
+    cursor:pointer;
+    visibility: hidden;
+    width:500px;
+    display:flex;
+    margin:0 auto;
+    text-align: center;
+}
+#descarga > div, #descarga > div > img
+{
+    flex: auto;
+    border-radius:0px;
+}

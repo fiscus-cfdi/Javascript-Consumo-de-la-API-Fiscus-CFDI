@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Interfaz para dar de alta una cuenta por medio de la API de Fiscus CFDI">
+    <meta name="keywords" content="Facturación, SAT, México, API">
+    <meta name="author" content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Agregar Cuenta</title>
+    <link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
+</head>
+
+<body>
+    <img src="img/fiscus_cfdi.png"><br>
+
+    <input type="email" id="correo" placeholder="Correo" value="" required>
+    <input type="password" id="password" placeholder="Contraseña" value="" required>
+    <input type="text" id="nombre" placeholder="Nombre" value="">
+    <input type="text" id="apellidoP" placeholder="Apellido Paterno" value="">
+    <input type="text" id="apellidoM" placeholder="Apellido Materno" value="">
+
+
+    <button id="agregar_cuenta_btn"> Dar de alta cuenta</button>
+
+    <script type="text/javascript" src="js/consumo_api.js"></script>
+    <script type="text/javascript" src="js/agregar_cuenta.js"></script>
+    <script type="text/javascript">
+        (function () {
+            var consumo_api=new ComsumirApi();
+            consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+            consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+
+            var altaCuenta=new AltaCuenta();
+            altaCuenta.setAmbiente("sandbox");
+            altaCuenta.setConsumirApi(consumo_api);
+        })();
+    </script>
+</body>
+
+</html>
