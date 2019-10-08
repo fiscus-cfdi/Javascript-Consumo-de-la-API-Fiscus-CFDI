@@ -177,6 +177,29 @@ class ComsumirApi
             callback(e);
         });
     }
+    /**
+     * Description. Guarda un JSON representativo del CFDI al que solo se le omitirían los datos del receptor. Este JSON será validado y guardado para su futura facturación
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-08-26
+     * @param  {object} ticket objeto con los valores requeridos/opcionales para crear un ticket, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+     * @param {function} callback donde regresará el control
+     * @return {void}
+    **/
+    api_guardar_ticket(ticket, callback)
+    {
+        this.api_obtener_token((token)=>{
+
+            ticket["token"]=token;
+            console.log(ticket);
+            var credenciales = this.convertir_parametros_post(ticket);
+            this.peticion_servidor(this.#url+"api_guardar_ticket",credenciales,(datos)=>{
+                console.log(datos);
+                callback(datos);
+            });
+        },(e)=>{
+            callback(e);
+        });
+    }
 
 
     /**

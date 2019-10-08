@@ -95,6 +95,17 @@ Desde la api se pueden dar de alta cuentas especificando un correo valido y una 
     
 ```
 
+## Guardar Ticket
+Para que el cliente pueda ver la factura relacionada con su transacción es necesario guardar su ticket para lo que se necesita que forme un JSON con la estructura del CFDI (omitiendo el nodo del receptor) además de una serie relacionada a su empresa y una clave de ticket arbitraria. Esta se validará y se habilitara su facturación. El ejemplo para guardar ticket un CFDI está en la siguiente [liga](https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/blob/master/Fiscus_CFDI_GuardarTicket.html).
+```javascript
+    var consumo_api=new ComsumirApi();
+    consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+    consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+    
+    var guardarTicket=new GuardarTicket();
+    guardarTicket.setConsumirApi(consumo_api);
+```
+
 # DOCUMENTACIÓN
 
 Para mayor detalle de cada método y cómo implementarlo en otro lenguaje de programación, ingrese a la documentación de la API
