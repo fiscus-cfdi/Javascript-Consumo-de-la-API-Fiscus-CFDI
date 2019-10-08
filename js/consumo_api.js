@@ -140,6 +140,20 @@ class ComsumirApi
         });
     }
 
+    api_agregar_cuenta(cuenta, callback) {
+        this.api_obtener_token((token) => {
+            cuenta["token"] = token;
+            console.log(cuenta);
+            var credenciales = this.convertir_parametros_post(cuenta);
+            this.peticion_servidor(this.#url+"api_agregar_cuenta", credenciales, (datos) => {
+                console.log(datos);
+                callback(datos);
+            });
+        }, (e) => {
+            callback(e);
+        });
+    }
+
     /**
      * Description. Método genérico para realiza las peticiones al servidor, utilizado por los métodos de api_obtener_token(), api_agregar_rfc(), api_timbrar_cfdi() & api_cancelar_cfdi(), recibe 3 parámetros; la url, las variables POST y una función callback 
      * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com

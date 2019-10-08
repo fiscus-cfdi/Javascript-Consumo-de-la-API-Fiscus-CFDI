@@ -67,6 +67,18 @@ Para cancelar un CFDI, primero tuvo que haber sido timbrado en la plataforma de 
     cancelarCFDI.setConsumirApi(consumo_api);
 ```
 
+### Agregar Cuenta
+Desde la api se pueden dar de alta cuentas especificando un correo valido y una contraseña. El ejemplo para agregar cuentas esta en la siguiente [liga](https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/blob/master/Fiscus_CFDI_AgregarCuenta.html). Para agregar una cuenta en ambiente de pruebas envía el string "**sandbox**" al método setAmbiente, en caso de querer agregar una cuente en ambiente de producción pasar el string "**production**" al mismo método (setAmbiente).
+```javascript
+    var consumo_api=new ComsumirApi();
+    consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+    consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+
+    var altaRfc=new AltaRfc();
+    altaRfc.setAmbiente("sandbox");
+    altaRfc.setConsumirApi(consumo_api);
+```
+
 
 
 # DOCUMENTACIÓN
