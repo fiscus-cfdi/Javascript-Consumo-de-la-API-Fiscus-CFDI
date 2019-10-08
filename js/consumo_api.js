@@ -139,6 +139,30 @@ class ComsumirApi
             callback(e);
         });
     }
+    /**
+     * Description. Modo para obtener las series asociadas a un RFC en Fiscus CFDI
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-10-08
+     * @param  {object} series objeto con los valores requeridos/opcionales para obtener las series de un RFC, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+     * @param {function} callback donde regresará el control
+     * @return {void}
+    **/
+    api_obtener_series(series, callback)
+    {
+        this.api_obtener_token((token)=>{
+            
+            series["token"]=token;
+            console.log(series);
+            var credenciales = this.convertir_parametros_post(series);
+            this.peticion_servidor(this.#url+"api_obtener_numeros_series",credenciales,(datos)=>{
+                console.log(datos);
+                callback(datos);
+            });
+        },(e)=>{
+            callback(e);
+        });
+    }
+
 
     api_agregar_cuenta(cuenta, callback) {
         this.api_obtener_token((token) => {
@@ -153,6 +177,7 @@ class ComsumirApi
             callback(e);
         });
     }
+
 
     /**
      * Description. Método genérico para realiza las peticiones al servidor, utilizado por los métodos de api_obtener_token(), api_agregar_rfc(), api_timbrar_cfdi() & api_cancelar_cfdi(), recibe 3 parámetros; la url, las variables POST y una función callback 
