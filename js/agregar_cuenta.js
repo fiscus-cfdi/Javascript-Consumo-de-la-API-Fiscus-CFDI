@@ -13,7 +13,7 @@
 class AltaCuenta
 {
     #alta = {
-        "env": "production",
+        "env": "sandbox",
         "token": "",
         "correo": "",
         "password": "",
