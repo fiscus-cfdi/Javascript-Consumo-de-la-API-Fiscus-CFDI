@@ -108,6 +108,7 @@ Para que el cliente pueda ver la factura relacionada con su transacción es nece
 
 ## Estatus Ticket
 Para saber el estatus de un Ticket se puede realizar una petición para un ticket o en una sola petición se pueden pasar multiples tickets siempre y cuando pertenezca a la misma serie del RFC. El ejemplo para obtener el estatus de un ticket está en la siguiente [liga](https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/blob/master/Fiscus_CFDI_EstatusTicket.html).
+
 ```javascript
     var consumo_api=new ComsumirApi();
     consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
