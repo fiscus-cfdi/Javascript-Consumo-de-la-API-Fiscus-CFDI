@@ -56,7 +56,8 @@ class AltaCuenta
     }
 
     /**
-     * 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date 2019-10-08
      */
     eventos() {
         document.getElementById("agregar_cuenta_btn").addEventListener("click", (e) => {
@@ -65,7 +66,8 @@ class AltaCuenta
     }
 
     /**
-     * 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date 2019-10-08
      */
     validarDatos() {
         this.#alta["correo"] = document.getElementById("correo").value;
@@ -83,7 +85,8 @@ class AltaCuenta
     }
 
     /**
-     * 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date 2019-10-08
      */
     enviar_datos() {
         this.#consumirApi.api_agregar_cuenta(this.#alta, (datos) => {
