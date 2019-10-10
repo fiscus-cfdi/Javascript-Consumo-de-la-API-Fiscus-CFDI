@@ -89,9 +89,9 @@ Desde la api se pueden dar de alta cuentas especificando un correo valido y una 
     consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
     consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
 
-    var altaRfc=new AltaRfc();
-    altaRfc.setAmbiente("sandbox");
-    altaRfc.setConsumirApi(consumo_api);
+    var altaCuenta=new AltaCuenta();
+    altaCuenta.setAmbiente("sandbox");
+    altaCuenta.setConsumirApi(consumo_api);
     
 ```
 
