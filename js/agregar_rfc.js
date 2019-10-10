@@ -28,7 +28,8 @@ class AltaRfc
         "logotipo_formato":"",
         "nombre_comercial":"",
         "codigo_postal":"",
-        "zona_horaria":""
+        "zona_horaria":"",
+        "cuenta_propietario": ""
     };
     #consumirApi = null;
 
@@ -146,6 +147,7 @@ class AltaRfc
         this.#alta["nombre_comercial"]= document.getElementById("nombre_comercial").value;
         this.#alta["codigo_postal"]= document.getElementById("codigo_postal").value;
         this.#alta["zona_horaria"]= document.getElementById("zona_horaria").value;
+        this.#alta["cuenta_propietario"]= document.getElementById("cuenta_propietario").value;
 
         if(this.#alta["rfc"].length>0 && this.#alta["razon_social"].length>0 && this.#alta["certificado_password"].length>0)
         {
