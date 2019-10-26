@@ -118,6 +118,18 @@ Para saber el estatus de un Ticket se puede realizar una petición para un ticke
     estatusTicket.setConsumirApi(consumo_api);
 ```
 
+## Enviar Factura
+Para enviar una factura timbrada a un correo se debe contar con el folio fiscal generado para esta y especificar la direccion del correo. El ejemplo para enviar una factura está en la siguiente [liga](https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/blob/master/Fiscus_CFDI_EnviarFactura.html).
+
+```javascript
+    var consumo_api=new ComsumirApi();
+    consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+    consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+    
+    var altaCuenta=new EnviarFactura();
+    altaCuenta.setConsumirApi(consumo_api);
+```
+
 
 
 # DOCUMENTACIÓN
