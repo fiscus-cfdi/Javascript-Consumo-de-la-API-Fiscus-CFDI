@@ -130,6 +130,19 @@ Para enviar una factura timbrada a un correo se debe contar con el folio fiscal 
     altaCuenta.setConsumirApi(consumo_api);
 ```
 
+## Obtener Folio
+Devuelve el proximo numero de folio consecutivo correspondiente al rfc y serie de emisor proporcionados, si no se especifica una serie se tomaran en cuenta los folios correspondientes a este rfc y sin serie. El ejemplo para enviar una factura esta en la siguente [liga](https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/blob/master/Fiscus_CFDI_ObtenerFolio.html).
+
+```javascript
+    var consumo_api=new ComsumirApi();
+    consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+    consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+
+    var obtenerFolio = new ObtenerFolio();
+    obtenerFolio.setAmbiente("sandbox");
+    obtenerFolio.setConsumirApi(consumo_api);
+```
+
 
 
 # DOCUMENTACIÓN
