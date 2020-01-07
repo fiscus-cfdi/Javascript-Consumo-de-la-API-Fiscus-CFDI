@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Interfaz para obtener la(s) serie(s) de un RFC por medio de la API de Fiscus CFDI">
+    <meta name="description" content="Interfaz para dar de alta un RFC por medio de la API de Fiscus CFDI">
     <meta name="keywords" content="Facturación, SAT, México, API">
     <meta name="author" content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,20 +14,25 @@
 <body>
     <img src="img/fiscus_cfdi.png"><br>
 
-    <input type="text" maxlength="13" id="rfc" placeholder="RFC" value="" required><br>
-    <button id="obtener_series_cfdi_btn">Obtener Series</button>
+    <!-- Información Requerida para obtener el siguiente folio -->
+    <input type="text" maxlength="13" id="rfc" placeholder="RFC del emisor" value="" required>
+    
+    <!-- Información Opcional para obtener el siguiente folio -->
+    <input type="text" maxlength="13" id="serie" placeholder="Serie del emisor" value="">
+    <br>
+    <button id="agregar_obtener_folio"> Obtener folio </button>
 
     <script type="text/javascript" src="js/consumo_api.js"></script>
-    <script type="text/javascript" src="js/obtener_series.js"></script>
+    <script type="text/javascript" src="js/obtener_folio.js"></script>
     <script type="text/javascript">
         (function () {
             var consumo_api=new ComsumirApi();
             consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
             consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
 
-            var obtener_series = new ObtenerSeries();
-            obtener_series.setAmbiente("sandbox");
-            obtener_series.setConsumirApi(consumo_api);
+            var obtenerFolio = new ObtenerFolio();
+            obtenerFolio.setAmbiente("sandbox");
+            obtenerFolio.setConsumirApi(consumo_api);
         })();
     </script>
 </body>

@@ -177,7 +177,95 @@ class ComsumirApi
             callback(e);
         });
     }
+    /**
+     * Description. Guarda un JSON representativo del CFDI al que solo se le omitirían los datos del receptor. Este JSON será validado y guardado para su futura facturación
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-08-26
+     * @param  {object} ticket objeto con los valores requeridos/opcionales para crear un ticket, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+     * @param {function} callback donde regresará el control
+     * @return {void}
+    **/
+    api_guardar_ticket(ticket, callback)
+    {
+        this.api_obtener_token((token)=>{
 
+            ticket["token"]=token;
+            console.log(ticket);
+            var credenciales = this.convertir_parametros_post(ticket);
+            this.peticion_servidor(this.#url+"api_guardar_ticket",credenciales,(datos)=>{
+                console.log(datos);
+                callback(datos);
+            });
+        },(e)=>{
+            callback(e);
+        });
+    }
+
+    /**
+     * Description. Método para obtener el estatus de un Ticket por medio de la API de Fiscus CFDI
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-08-27
+     * @param  {object} estatus_ticket objeto con los valores requeridos/opcionales para obtener el Estatus de un Ticket, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+     * @param {function} callback donde regresará el control
+     * @return {void}
+    **/
+   api_estatus_ticket(estatus_ticket, callback)
+   {
+       this.api_obtener_token((token)=>{
+           
+           estatus_ticket["token"]=token;
+           console.log(estatus_ticket);
+           var credenciales = this.convertir_parametros_post(estatus_ticket);
+           this.peticion_servidor(this.#url+"api_estatus_ticket",credenciales,(datos)=>{
+               console.log(datos);
+               callback(datos);
+           });
+       },(e)=>{
+           callback(e);
+       });
+   }
+
+    api_enviar_factura(factura, callback) {
+        this.api_obtener_token((token) => {
+            factura["token"] = token;
+            console.log(factura);
+            var credenciales = this.convertir_parametros_post(factura);
+            this.peticion_servidor(this.#url+"api_enviar_factura", credenciales, (datos) => {
+                console.log(datos);
+                callback(datos);
+            });
+        }, (e) => {
+            callback(e);
+        });
+    }
+
+    api_obtener_folio(infoEmisor, callback) {
+        this.api_obtener_token((token) => {
+            infoEmisor["token"] = token;
+            console.log("info peticion:", infoEmisor);
+            var credenciales = this.convertir_parametros_post(infoEmisor);
+            this.peticion_servidor(this.#url+"api_obtener_folio", credenciales, (datos) => {
+                console.log("info respuesta:", datos);
+                callback(datos);
+            });
+        }, (e) => {
+            callback(e);
+        });
+    }
+
+    api_obtener_factura(data_factura, callback){
+        this.api_obtener_token((token) => {
+            data_factura["token"] = token;
+            console.log("info peticion: ", data_factura);
+            var credenciales = this.convertir_parametros_post(data_factura);
+            this.peticion_servidor(this.#url + "api_obtener_factura", credenciales, (data) => {
+                console.log("info respuesta:", data);
+                callback(data);
+            });
+        }, (e) => {
+            callback(e);
+        });
+    }
 
     /**
      * Description. Método genérico para realiza las peticiones al servidor, utilizado por los métodos de api_obtener_token(), api_agregar_rfc(), api_timbrar_cfdi() & api_cancelar_cfdi(), recibe 3 parámetros; la url, las variables POST y una función callback 

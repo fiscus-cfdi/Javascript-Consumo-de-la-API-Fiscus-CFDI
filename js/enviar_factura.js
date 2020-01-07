@@ -10,18 +10,13 @@
  * @see ConsumirApi
  * @link https://www.fiscuscfdi.com/API_Facturacion/docs/
  */
-class AltaCuenta
+class EnviarFactura
 {
-    #alta = {
+    #enviar_factura = {
         "env": "sandbox",
         "token": "",
-        "correo": "",
-        "password": "",
-
-        //VARIABLES OPCIONALES
-        "nombre":"",
-        "apellidoP":"",
-        "apellidoM":""
+        "uuid": "",
+        "correo": ""
     }
     #consumirApi = null;
 
@@ -33,7 +28,7 @@ class AltaCuenta
      * @return {void} 
      */
     setAmbiente(env) {
-        this.#alta["env"] = env;
+        this.#enviar_factura["env"] = env;
     }
 
     /**
@@ -60,7 +55,7 @@ class AltaCuenta
      * @date 2019-10-08
      */
     eventos() {
-        document.getElementById("agregar_cuenta_btn").addEventListener("click", (e) => {
+        document.getElementById("enviar_factura_btn").addEventListener("click", (e) => {
             this.validarDatos();
         })
     }
@@ -70,18 +65,15 @@ class AltaCuenta
      * @date 2019-10-08
      */
     validarDatos() {
-        this.#alta["correo"] = document.getElementById("correo").value;
-        this.#alta["password"] = document.getElementById("password").value;
-        this.#alta["nombre"] = document.getElementById("nombre").value;
-        this.#alta["apellido_paterno"] = document.getElementById("apellidoP").value;
-        this.#alta["apellido_materno"] = document.getElementById("apellidoM").value;
+        this.#enviar_factura["correo"] = document.getElementById("correo").value;
+        this.#enviar_factura["uuid"] = document.getElementById("uuid").value;
 
-        if (this.#alta["correo"] !== "" && this.#alta["password"] !== "") {
+        if (this.#enviar_factura["correo"] !== "" && this.#enviar_factura["uuid"] !== "") {
             this.enviar_datos();
         } else {
-            alert("El correo y el password son requeridos");
+            alert("El correo y el folio fiscal son requeridos");
         }
-        console.log(this.#alta);
+        console.log(this.#enviar_factura);
     }
 
     /**
@@ -89,7 +81,7 @@ class AltaCuenta
      * @date 2019-10-08
      */
     enviar_datos() {
-        this.#consumirApi.api_agregar_cuenta(this.#alta, (datos) => {
+        this.#consumirApi.api_enviar_factura(this.#enviar_factura, (datos) => {
             console.log(datos);
             alert(JSON.stringify(datos));
         })
