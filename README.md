@@ -143,7 +143,18 @@ Devuelve el proximo numero de folio consecutivo correspondiente al rfc y serie d
     obtenerFolio.setConsumirApi(consumo_api);
 ```
 
+## Obtener Factura
+Devuelve el xml timbrado y el pdf correspondiente al folio fiscal recibido, si se envía el parámetro logotipo reemplaza el logotipo del RFC emisor o serie si tiene uno asignado, de no ser así lo agrega solo para ese pdf.
 
+```javascript
+    var consumo_api=new ComsumirApi();
+    consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+    consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+
+    var obtener_factura = new ObtenerFactura();
+    obtener_factura.setAmbiente("sandbox");
+    obtener_factura.setConsumirApi(consumo_api);
+```
 
 # DOCUMENTACIÓN
 
