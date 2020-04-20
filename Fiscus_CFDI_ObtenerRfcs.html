@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="description"
+      content="Interfaz para obtener la(s) serie(s) de un RFC por medio de la API de Fiscus CFDI"
+    />
+    <meta name="keywords" content="Facturación, SAT, México, API" />
+    <meta
+      name="author"
+      content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Agregar RFC</title>
+    <link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" />
+  </head>
+
+  <body>
+    <img src="img/fiscus_cfdi.png" /><br />
+
+    <button id="obtener_rfcs_cfdi_btn">Obtener RFCs</button>
+
+    <script type="text/javascript" src="js/consumo_api.js"></script>
+    <script type="text/javascript" src="js/obtener_rfcs.js"></script>
+    <script type="text/javascript">
+      (function () {
+        var consumo_api = new ComsumirApi();
+        consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+        consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+
+        var obtener_rfcs = new ObtenerRfcs();
+        obtener_rfcs.setAmbiente("sandbox");
+        obtener_rfcs.setConsumirApi(consumo_api);
+      })();
+    </script>
+  </body>
+</html>
