@@ -13,7 +13,6 @@
  */
 class ObtenerRfcs {
   #consumirApi = null;
-  #rfc = "";
   #env = "sandbox";
 
   /**
@@ -69,11 +68,75 @@ class ObtenerRfcs {
       env: this.#env,
       token: "-1",
     };
-    this.#consumirApi.api_obtener_rfcs(data, (datos) => {
+    this.#consumirApi.api_obtener_rfcs(data, (res) => {
       //Respuesta del servidor
-      console.log(datos);
-      alert(JSON.stringify(datos));
+      console.log(res);
+      this.drawResult(res);
       document.getElementById("obtener_rfcs_cfdi_btn").disabled = false;
     });
+  }
+
+  /**
+   * Description. Método para realizar la petición para Obtener los RFCs a la API de Fiscus CFDI
+   * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+   * @date   2019-08-27
+   * @return {void}
+   **/
+  drawResult({ json_respuesta: { rfcs } }) {
+    var resultBox = document.getElementById("result");
+
+    // Limpiar resultado
+    resultBox.innerHTML = "";
+
+    // Crear lista
+    // var ul = document.createElement("ul");
+    // for (var { rfc, razon_social: rs, estatus } of rfcs) {
+    //   var li = document.createElement("li");
+    //   li.append(`${rfc} - ${rs} - ${estatus}`);
+    //   ul.appendChild(li);
+    // }
+
+    // resultBox.appendChild(ul);
+
+    // Crear Tabla
+    var table = document.createElement("table");
+    var tableHead = document.createElement("thead");
+    var tableBody = document.createElement("tbody");
+
+    table.setAttribute("cellpadding", 10);
+
+    // Header
+    var thead1 = document.createElement("th");
+    var thead2 = document.createElement("th");
+    var thead3 = document.createElement("th");
+
+    thead1.append("RFC");
+    thead2.append("RAZON SOCIAL");
+    thead3.append("ESTATUS");
+    tableHead.appendChild(thead1);
+    tableHead.appendChild(thead2);
+    tableHead.appendChild(thead3);
+    table.appendChild(tableHead);
+
+    // Filas
+    rfcs.forEach((rfc) => {
+      var trow = document.createElement("tr");
+
+      // Columnas
+      for (var key in rfc) {
+        if (rfc.hasOwnProperty(key)) {
+          var data = rfc[key];
+          var tcell = document.createElement("td");
+
+          tcell.append(data);
+          trow.appendChild(tcell);
+        }
+      }
+
+      tableBody.appendChild(trow);
+    });
+
+    table.appendChild(tableBody);
+    resultBox.appendChild(table);
   }
 }
