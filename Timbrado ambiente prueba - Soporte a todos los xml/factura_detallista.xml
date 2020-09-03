@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:detallista="http://www.sat.gob.mx/detallista" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Certificado="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" Descuento="10" Fecha="2020-08-28T14:36:18" Folio="66" FormaPago="01" LugarExpedicion="66050" MetodoPago="PUE" Moneda="MXN" NoCertificado="20001000000300022762" Sello="Y+Dkd4nrSh3wGDAVK4IlrEsIupBsOteIolrY/bmKvvos01358hxJf65tjHPn956Hlu4lh9n+wM4LcuE0CuSSz08LNrBK1uo/b9fQMNmkUX3Xig21fESxiBmePjvxU0Pn0G2U0WeAEUJjJYhXhIqD1TFcW5JVfQur7qRv1RAkW9X68A3Z8bw+cybEytWih64Cs0ZOsQKYKb1NZdqwBqCI+2bh472/0HkvFlheodzCYPXhrxYgdnak2skxw+lZ8dYMhamjfK1KsU2MzEzt82zlzMn2OX1GTeQAVriSOOilKkNQvqtHO36HeaMF42f+x4AxarUfJ6AR11pH+aCF/5GRfQ==" SubTotal="2000" TipoDeComprobante="I" Total="2308.4" Version="3.3" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3  http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv33.xsd">
+<cfdi:Emisor Nombre="TCM970625MB1" RegimenFiscal="601" Rfc="TCM970625MB1"/>
+<cfdi:Receptor Nombre="Ejemplo" Rfc="XAXX010101000" UsoCFDI="G01"/>
+<cfdi:Conceptos>
+<cfdi:Concepto Cantidad="10" ClaveProdServ="80161500" ClaveUnidad="H87" Descripcion="Servicios de apoyo gerencial. Timbrado desde fiscuscfdi.com" Descuento="5" Importe="1000.00" NoIdentificacion="8" Unidad="H87" ValorUnitario="100.00">
+<cfdi:Impuestos>
+<cfdi:Traslados>
+<cfdi:Traslado Base="995" Importe="159.2" Impuesto="002" TasaOCuota="0.16" TipoFactor="Tasa"/>
+</cfdi:Traslados>
+</cfdi:Impuestos>
+</cfdi:Concepto>
+<cfdi:Concepto Cantidad="10" ClaveProdServ="81111506" ClaveUnidad="H87" Descripcion="Servicios de programación para clientes o servidores. Timbrado desde fiscuscfdi.com" Descuento="5" Importe="1000.00" NoIdentificacion="9" Unidad="H87" ValorUnitario="100.00">
+<cfdi:Impuestos>
+<cfdi:Traslados>
+<cfdi:Traslado Base="995" Importe="159.2" Impuesto="002" TasaOCuota="0.16" TipoFactor="Tasa"/>
+</cfdi:Traslados>
+</cfdi:Impuestos>
+</cfdi:Concepto>
+</cfdi:Conceptos>
+<cfdi:Impuestos TotalImpuestosTrasladados="318.4">
+<cfdi:Traslados>
+<cfdi:Traslado Importe="318.4" Impuesto="002" TasaOCuota="0.16" TipoFactor="Tasa"/>
+</cfdi:Traslados>
+</cfdi:Impuestos>
+<cfdi:Complemento>
+<detallista:detallista documentStatus="ORIGINAL" documentStructureVersion="AMC8.1">
+<detallista:requestForPaymentIdentification>
+<detallista:entityType>INVOICE</detallista:entityType>
+</detallista:requestForPaymentIdentification>
+<detallista:orderIdentification>
+<detallista:referenceIdentification type="ON">123453</detallista:referenceIdentification>
+<detallista:ReferenceDate>2020-08-28</detallista:ReferenceDate>
+</detallista:orderIdentification>
+<detallista:AdditionalInformation>
+<detallista:referenceIdentification type="AAE">1235</detallista:referenceIdentification>
+</detallista:AdditionalInformation>
+<detallista:DeliveryNote>
+<detallista:referenceIdentification>135556</detallista:referenceIdentification>
+<detallista:ReferenceDate>2020-08-28</detallista:ReferenceDate>
+</detallista:DeliveryNote>
+<detallista:buyer>
+<detallista:gln>9919999199821</detallista:gln>
+<detallista:contactInformation>
+<detallista:personOrDepartmentName>
+<detallista:text>Departamento</detallista:text>
+</detallista:personOrDepartmentName>
+</detallista:contactInformation>
+</detallista:buyer>
+<detallista:seller>
+<detallista:gln>7504023722000</detallista:gln>
+<detallista:alternatePartyIdentification type="SELLER_ASSIGNED_IDENTIFIER_FOR_A_PARTY">12345678</detallista:alternatePartyIdentification>
+</detallista:seller>
+<detallista:currency currencyISOCode="MXN">
+<detallista:currencyFunction>BILLING_CURRENCY</detallista:currencyFunction>
+</detallista:currency>
+<detallista:lineItem>
+<detallista:tradeItemIdentification>
+<detallista:gtin>5732GF832871</detallista:gtin>
+</detallista:tradeItemIdentification>
+<detallista:invoicedQuantity unitOfMeasure="123452">1234</detallista:invoicedQuantity>
+<detallista:allowanceCharge allowanceChargeType="ALLOWANCE_GLOBAL" sequenceNumber="123" settlementType="OFF_INVOICE">
+<detallista:specialServicesType>AA</detallista:specialServicesType>
+<detallista:monetaryAmountOrPercentage>
+<detallista:percentagePerUnit>12</detallista:percentagePerUnit>
+<detallista:ratePerUnit>
+<detallista:amountPerUnit>12</detallista:amountPerUnit>
+</detallista:ratePerUnit>
+</detallista:monetaryAmountOrPercentage>
+</detallista:allowanceCharge>
+<detallista:totalLineAmount>
+<detallista:grossAmount>
+<detallista:Amount>1234</detallista:Amount>
+</detallista:grossAmount>
+<detallista:netAmount>
+<detallista:Amount>3456</detallista:Amount>
+</detallista:netAmount>
+</detallista:totalLineAmount>
+</detallista:lineItem>
+</detallista:detallista>
+<tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" FechaTimbrado="2020-08-28T14:43:08" NoCertificadoSAT="20001000000300022323" RfcProvCertif="VSI850514HX4" SelloCFD="Y+Dkd4nrSh3wGDAVK4IlrEsIupBsOteIolrY/bmKvvos01358hxJf65tjHPn956Hlu4lh9n+wM4LcuE0CuSSz08LNrBK1uo/b9fQMNmkUX3Xig21fESxiBmePjvxU0Pn0G2U0WeAEUJjJYhXhIqD1TFcW5JVfQur7qRv1RAkW9X68A3Z8bw+cybEytWih64Cs0ZOsQKYKb1NZdqwBqCI+2bh472/0HkvFlheodzCYPXhrxYgdnak2skxw+lZ8dYMhamjfK1KsU2MzEzt82zlzMn2OX1GTeQAVriSOOilKkNQvqtHO36HeaMF42f+x4AxarUfJ6AR11pH+aCF/5GRfQ==" SelloSAT="oxxNFUa0spXbOZIUd+PwhYMWIGzCgYByfSm0FeezeNn/FXIcGgac3/M+bqu0YNRLC3nFcgMxfLXMcsTy7Jwgb6v0ZJqhS/lTDD4lMx2lR3Zj0T1JjLTmCORjpUoYVMVc6WXA62AFrzifcuTaHEAI2UgimB35KNw/qIcdh7EDVhIefupcpCud9zY0lYxrfZlo6TRWoxywx2C2MtaGIAWn+aRCAcSfbabTbVZy+mB8Hb8OAi8Q3yUxpCmOehwJK4W6/ful/L+HEGhhOgvb7Iv/QuNuweOfQynxJ8HCZ/CWHUM0FTq/6cNrz5HD25njYYLyrR2UlgJ/CxGvUxcSFelyqw==" UUID="E2246FB8-52E7-47AC-882A-DDF8E158400B" Version="1.1" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/sitio_internet/cfd/timbrefiscaldigital/TimbreFiscalDigitalv11.xsd"/>
+</cfdi:Complemento>
+</cfdi:Comprobante>
