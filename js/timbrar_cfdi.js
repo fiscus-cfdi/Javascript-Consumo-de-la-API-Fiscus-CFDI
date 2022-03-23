@@ -102,6 +102,16 @@ class TimbrarCFDI
         this.#callback_timbrado_exitoso=callback;
     }
     /**
+     * Description. Método para obtener el objeto CFDI.
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-23
+     * @return {string}
+    **/
+    getCfdi()
+    {
+        return this.#cfdi;
+    } 
+    /**
      * Description. Método para establecer el CFDI, útil cuando se guarda un borrador y tiempo después se quiere retomar para timbrar.
      * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
      * @date   2022-03-21
