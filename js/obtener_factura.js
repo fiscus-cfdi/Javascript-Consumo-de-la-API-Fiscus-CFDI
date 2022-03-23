@@ -2,8 +2,10 @@
 
 class ObtenerFactura{
 	#consumirApi = null;
-  #uuid="";
-  #env="sandbox";
+	#uuid="";
+	#env="sandbox";
+	#token="";
+	#logotipo="";
 
   setAmbiente(env){
   	this.#env = env;

@@ -8,8 +8,8 @@
  * @param {class} consumirApi instancia de la clase ConsumirApi, para realizar las peticiones al servidor
  * @param {string} rfc RFC de la empresa que se va a cancelar
  * @param {string} env ambiente sandbox | production
- * @see https://www.fiscuscfdi.com/API_Facturacion/docs/
- * @link https://www.fiscuscfdi.com/API_Facturacion/docs/
+ * @see https://fiscuscfdi.com/API_Facturacion/docs/
+ * @link https://fiscuscfdi.com/API_Facturacion/docs/
  */
 class ObtenerRfcs {
   #consumirApi = null;

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Interfaz para dar de alta una cuenta por medio de la API de Fiscus CFDI">
+	<meta name="keywords" content="Facturación, SAT, México, API">
+	<meta name="author" content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Pre-factura</title>
+	<link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
+</head>
+<body>
+	<input type="text" id="rfc_emisor" class="rfc_emisor" placeholder="RFC" value="IXS7607092R5">
+	<input type="text" id="json_cfdi" class="json_cfdi" placeholder="json_cfdi" value='{ "Version": "4.0", "Folio": 2, "Fecha": "2022-10-18T16:46:29", "Sello": "@", "FormaPago": "03", "Certificado": "@", "NoCertificado": 1, "SubTotal": 27445.6, "Moneda": "MXN", "Total": 31836.9, "TipoDeComprobante": "I", "Exportacion": "01", "MetodoPago": "PUE", "LugarExpedicion": "64010", "Emisor": { "Rfc": "IXS7607092R5", "Nombre": "INTERNACIONAL XIMBO Y SABORES", "RegimenFiscal": "601" }, "Receptor": { "Rfc": "KICR630120NX3", "Nombre": "RODRIGO KITIA CASTRO", "UsoCFDI": "G03", "DomicilioFiscalReceptor": "64010", "RegimenFiscalReceptor": "612" }, "Conceptos": { "Concepto": [ { "Impuestos": { "Traslados": { "Traslado": [ { "Base": 27445.6, "Impuesto": "002", "TipoFactor": "Tasa", "TasaOCuota": 0.16, "Importe": 4391.3 } ] } }, "ClaveProdServ": "78101803", "Cantidad": "47.320", "ClaveUnidad": "E48", "ObjetoImp": "02", "Unidad": "E48", "Descripcion": "Transporte", "ValorUnitario": "580.0000", "Importe": "27445.6000" } ] } }'>
+	
+	<button id="boton_obtener_prefactura">Obtener Pre-factura</button>
+
+	<script type="text/javascript" src="js/consumo_api.js"></script>
+	<script type="text/javascript" src="js/prefacturacion.js"></script>
+	<script type="text/javascript">
+		(function(){
+			var consumo_api=new ConsumirApi();
+            consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+            consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+            consumo_api.setUrl("https://fiscuscfdi.com/index.php/Api?peticion=");
+            
+
+			var pre = new Prefacturacion();
+			pre.setConsumirApi(consumo_api);
+		})();
+	</script>
+</body>
+</html>

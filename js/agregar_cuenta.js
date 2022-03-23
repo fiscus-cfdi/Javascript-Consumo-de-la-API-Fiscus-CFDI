@@ -8,7 +8,7 @@
  * @param {object} alta objecto con las variables que se enviarán para dar de alta un RFC
  * @param {class} consumirApi instancia de la clase ConsumirApi, para realizar las peticiones al servidor
  * @see ConsumirApi
- * @link https://www.fiscuscfdi.com/API_Facturacion/docs/
+ * @link https://fiscuscfdi.com/API_Facturacion/docs/
  */
 class AltaCuenta
 {

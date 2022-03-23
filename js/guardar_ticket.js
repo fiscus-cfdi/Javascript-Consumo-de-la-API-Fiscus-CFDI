@@ -15,7 +15,7 @@
  * @param {string} ticket codigo propio del cliente para identificar el ticket
  * @param {number} importe importe final con de la transacción
  * @see ConsumirApi
- * @link https://www.fiscuscfdi.com/API_Facturacion/docs/
+ * @link https://fiscuscfdi.com/API_Facturacion/docs/
  */
 class GuardarTicket
 {

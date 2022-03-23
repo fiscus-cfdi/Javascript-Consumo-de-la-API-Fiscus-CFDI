@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Description. Clase para realizar las peticiones al servidor de la API de Fiscus CFDI, conforme a la documentación: https://www.fiscuscfdi.com/API_Facturacion/docs/
+ * Description. Clase para realizar las peticiones al servidor de la API de Fiscus CFDI, conforme a la documentación: https://fiscuscfdi.com/API_Facturacion/docs/
  * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
  * @date 2019-08-22
  * @version 1.0.0
@@ -8,13 +8,25 @@
  * @param {string} usuario credenciales para consumir la API
  * @param {string} password credenciales para consumir la API
  * @param {string} url de la API de Fiscus CFDI
- * @see https://www.fiscuscfdi.com/API_Facturacion/docs/
- * @link https://www.fiscuscfdi.com/API_Facturacion/docs/
+ * @see https://fiscuscfdi.com/API_Facturacion/docs/
+ * @link https://fiscuscfdi.com/API_Facturacion/docs/
  */
-class ComsumirApi {
+class ConsumirApi {
   #usuario = "";
   #password = "";
-  #url = "https://www.fiscuscfdi.com/index.php/Api?peticion=";
+  #url = "https://fiscuscfdi.com/index.php/Api?peticion=";
+  
+  /**
+   * Description. Método para establecer la URL, cuando se utilizará un proxy para realizar las peticiones
+   * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+   * @date   2022-03-21
+   * @param  {string} url
+   * @return {void}
+   **/
+  setUrl(url)
+  {
+    this.#url=url;
+  }
 
   /**
    * Description. Método para establecer el Usuario para consumir la API de Fiscus CFDI
@@ -37,7 +49,7 @@ class ComsumirApi {
     this.#password = password;
   }
   /**
-   * Description. Método para obtener un Token y poder consumir los demás métodos, según la documentación de la API de Fiscus CFDI - https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * Description. Método para obtener un Token y poder consumir los demás métodos, según la documentación de la API de Fiscus CFDI - https://fiscuscfdi.com/API_Facturacion/docs/
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-08-22
    * @param  {function} callback_exito pasa el control a la función callback_exito
@@ -68,7 +80,7 @@ class ComsumirApi {
    * Description. Método para dar de alta un RFC en la plataforma de Fiscus CFDI, mediante la API
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-08-22
-   * @param  {object} agregar_rfc objeto con los valores requeridos/opcionales para dar de alta un RFC, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * @param  {object} agregar_rfc objeto con los valores requeridos/opcionales para dar de alta un RFC, conforme a la documentación de la API de Fiscus CFDI: https://fiscuscfdi.com/API_Facturacion/docs/
    * @return {void}
    **/
   api_agregar_rfc(agregar_rfc, callback) {
@@ -96,7 +108,7 @@ class ComsumirApi {
    * Description. Método para timbrar un CFDI en Fiscus CFDI, mediante la API
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-08-26
-   * @param  {object} cfdi objeto con los valores requeridos/opcionales para timbrar un CFDI, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * @param  {object} cfdi objeto con los valores requeridos/opcionales para timbrar un CFDI, conforme a la documentación de la API de Fiscus CFDI: https://fiscuscfdi.com/API_Facturacion/docs/
    * @param {function} callback donde regresará el control
    * @return {void}
    **/
@@ -124,7 +136,7 @@ class ComsumirApi {
    * Description. Método para cancelar un CFDI en Fiscus CFDI, mediante la API
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-08-27
-   * @param  {object} cancelar objeto con los valores requeridos/opcionales para cancelar un CFDI, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * @param  {object} cancelar objeto con los valores requeridos/opcionales para cancelar un CFDI, conforme a la documentación de la API de Fiscus CFDI: https://fiscuscfdi.com/API_Facturacion/docs/
    * @param {function} callback donde regresará el control
    * @return {void}
    **/
@@ -153,7 +165,7 @@ class ComsumirApi {
    * Description. Modo para obtener RFCs asociados a una cuenta en la API de Fiscus CFDI
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-10-08
-   * @param  {object} data objeto con los valores requeridos/opcionales para obtener las data de un RFC, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * @param  {object} data objeto con los valores requeridos/opcionales para obtener las data de un RFC, conforme a la documentación de la API de Fiscus CFDI: https://fiscuscfdi.com/API_Facturacion/docs/
    * @param {function} callback donde regresará el control
    * @return {void}
    **/
@@ -182,7 +194,7 @@ class ComsumirApi {
    * Description. Modo para obtener las series asociadas a un RFC en Fiscus CFDI
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-10-08
-   * @param  {object} series objeto con los valores requeridos/opcionales para obtener las series de un RFC, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * @param  {object} series objeto con los valores requeridos/opcionales para obtener las series de un RFC, conforme a la documentación de la API de Fiscus CFDI: https://fiscuscfdi.com/API_Facturacion/docs/
    * @param {function} callback donde regresará el control
    * @return {void}
    **/
@@ -231,7 +243,7 @@ class ComsumirApi {
    * Description. Guarda un JSON representativo del CFDI al que solo se le omitirían los datos del receptor. Este JSON será validado y guardado para su futura facturación
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-08-26
-   * @param  {object} ticket objeto con los valores requeridos/opcionales para crear un ticket, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * @param  {object} ticket objeto con los valores requeridos/opcionales para crear un ticket, conforme a la documentación de la API de Fiscus CFDI: https://fiscuscfdi.com/API_Facturacion/docs/
    * @param {function} callback donde regresará el control
    * @return {void}
    **/
@@ -260,7 +272,7 @@ class ComsumirApi {
    * Description. Método para obtener el estatus de un Ticket por medio de la API de Fiscus CFDI
    * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
    * @date   2019-08-27
-   * @param  {object} estatus_ticket objeto con los valores requeridos/opcionales para obtener el Estatus de un Ticket, conforme a la documentación de la API de Fiscus CFDI: https://www.fiscuscfdi.com/API_Facturacion/docs/
+   * @param  {object} estatus_ticket objeto con los valores requeridos/opcionales para obtener el Estatus de un Ticket, conforme a la documentación de la API de Fiscus CFDI: https://fiscuscfdi.com/API_Facturacion/docs/
    * @param {function} callback donde regresará el control
    * @return {void}
    **/
@@ -335,6 +347,27 @@ class ComsumirApi {
         var credenciales = this.convertir_parametros_post(data_factura);
         this.peticion_servidor(
           this.#url + "api_obtener_factura",
+          credenciales,
+          (data) => {
+            console.log("info respuesta:", data);
+            callback(data);
+          }
+        );
+      },
+      (e) => {
+        callback(e);
+      }
+    );
+  }
+
+  api_previsualizar_prefactura(data_factura, callback) {
+    this.api_obtener_token(
+      (token) => {
+        data_factura["token"] = token;
+        console.log("info peticion: ", data_factura);
+        var credenciales = this.convertir_parametros_post(data_factura);
+        this.peticion_servidor(
+          this.#url + "api_previsualizar_prefactura",
           credenciales,
           (data) => {
             console.log("info respuesta:", data);

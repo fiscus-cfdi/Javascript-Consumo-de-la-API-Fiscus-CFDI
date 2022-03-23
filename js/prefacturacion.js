@@ -10,28 +10,17 @@
  * @see ConsumirApi
  * @link https://fiscuscfdi.com/API_Facturacion/docs/
  */
-class ObtenerFolio
+class Prefacturacion
 {
     #infoEmisor = {
-        "env":"sandbox",
         "token":"",
-        "rfc":"",        
-        //VARIABLES OPCIONALES
-        "serie":"",
+        "json_cfdi":"", 
+        "rfc_emisor":"",
+        "pdf":true
     };
     #consumirApi = null;
 
-    /**
-     * Description. Método para establecer el ambiente: sandbox | production
-     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
-     * @date   2019-08-26
-     * @param  {string} env ambiente sandbox | production
-     * @return {void}
-    **/
-    setAmbiente(env)
-    {
-        this.#infoEmisor["env"]=env;
-    }
+
     /**
      * Description. Método para establecer la instancia de ConsumirApi para realizar peticiones al servidor
      * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
@@ -59,23 +48,29 @@ class ObtenerFolio
     **/
     eventos()
     {
-        document.getElementById("agregar_obtener_folio").addEventListener("click",(e) => {
-            this.#infoEmisor["rfc"] = document.getElementById("rfc").value;
-            this.#infoEmisor["serie"] = document.getElementById("serie").value;
-            this.peticionFolio();
+        document.getElementById("boton_obtener_prefactura").addEventListener("click",(e) => {
+            this.#infoEmisor["json_cfdi"] = document.getElementById("json_cfdi").value;
+            this.#infoEmisor["rfc_emisor"] = document.getElementById("rfc_emisor").value;
+            this.peticion();
         });
     }
     /**
-     * Description. Método que reliza la conexión con el servidor de la API, mediante la variable de instancia consumirAPI por medio del método api_obtener_folio(...)
+     * Description. Método que reliza la conexión con el servidor de la API, mediante la variable de instancia consumirAPI por medio del método api_previsualizar_prefactura(...)
      * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
      * @date   2019-08-22
     **/
-   peticionFolio()
+    peticion()
     {
-        this.#consumirApi.api_obtener_folio(this.#infoEmisor, (datos)=>{
+        this.#consumirApi.api_previsualizar_prefactura(this.#infoEmisor, (datos)=>{
             //Respuesta del servidor
             console.log(datos);
             alert(JSON.stringify(datos));
+            var a = document.createElement("a");
+						a.href = "data:application/pdf;base64,"+datos.json_respuesta.pdf;
+						a.download = this.#infoEmisor["rfc_emisor"] + '.pdf';
+						document.body.appendChild(a);
+						a.click();
+						document.body.removeChild(a);
         });
     }
 }

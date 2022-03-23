@@ -1,3 +1,55 @@
+#SerieFolio{
+    width:50%;
+    display:block;
+    margin-left:50%;
+}
+#EmisorReceptor{
+    display:flex;
+    margin:0 auto;
+}
+#Errores{
+    text-align:center;
+}
+#EmisorReceptor > div{
+    flex:auto;
+}
+#agregar_concepto{
+    display:block;
+    margin-left:0px;
+}
+#descarga{
+    cursor:pointer;
+    visibility: hidden;
+    width:500px;
+    display:flex;
+    margin:0 auto;
+    text-align: center;
+}
+#descarga > div, #descarga > div > img{
+    flex: auto;
+    border-radius:0px;
+}
+#ComprobanteAtributosGeneral
+{
+    max-width:500px;
+    display:block;
+    margin:0 auto;
+}
+#DesgloseTotales
+{
+    text-align:right;
+}
+#DesgloseTotales > div > span
+{
+    min-width:100px;
+    display:inline-block;
+    text-align:center;
+}
+#DesgloseTotales > div > span:nth-child(2)
+{
+    text-align:right;
+}
+/* Elementos Generales */
 input,
 select,
 button {
@@ -9,46 +61,16 @@ button {
 img {
     width: 100px;
     border-radius: 50px;
-    display: block;
     margin: 0 auto;
 }
-#emisor_receptor
-{
-    display:flex;
-    margin:0 auto;
-    width:700px;
-}
-#emisor_receptor > div
-{
-    flex:auto;
-}
-table, td, th
-{
+table, td, th{
     border-collapse: collapse;
     border: 1px solid black;
     margin:0 auto;
 }
-td > input, td > select
-{
-    width:110px!important;
+td > input, td > input{
+}
+td > input, td > select{
+    width: 90%;
     height: 20px;
-}
-#agregar_concepto
-{
-    display:block;
-    margin-left:0px;
-}
-#descarga
-{
-    cursor:pointer;
-    visibility: hidden;
-    width:500px;
-    display:flex;
-    margin:0 auto;
-    text-align: center;
-}
-#descarga > div, #descarga > div > img
-{
-    flex: auto;
-    border-radius:0px;
 }

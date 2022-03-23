@@ -8,8 +8,8 @@
  * @param {class} consumirApi instancia de la clase ConsumirApi, para realizar las peticiones al servidor
  * @param {string} serie serie asociada al RFC del ticket
  * @param {string} ticket del RFC
- * @see https://www.fiscuscfdi.com/API_Facturacion/docs/
- * @link https://www.fiscuscfdi.com/API_Facturacion/docs/
+ * @see https://fiscuscfdi.com/API_Facturacion/docs/
+ * @link https://fiscuscfdi.com/API_Facturacion/docs/
  */
 class EstatusTicket
 {

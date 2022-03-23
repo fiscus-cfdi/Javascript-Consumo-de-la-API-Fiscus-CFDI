@@ -3,7 +3,7 @@
 /**
  * Description. Clase para manejar los eventos de Timbrar un CFDI genérico mediante la API de Fiscus CFDI
  * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
- * @date 2019-08-26
+ * @date 2022-03-21
  * @version 1.0.0
  * @access public
  * @param {object} cfdi objeto con la estructura de un xml que se enviarán para timbrar un CFDI
@@ -12,44 +12,153 @@
  * @param {string} contenido_xml contenido en base 64 del XML ya timbrado
  * @param {string} uuid folio fiscal
  * @param {string} env ambiente sandbox | production
+ * @param {array} errores array para almacenar los errores obtenidos antes de enviar a Timbrar 
+ *  @param {function} callback_timbrado_exitoso función callback cuando el timbrado fué exitoso
  * @see ConsumirApi
- * @link https://www.fiscuscfdi.com/API_Facturacion/docs/
+ * @link https://fiscuscfdi.com/API_Facturacion/docs/
  */
 class TimbrarCFDI
 {
     #cfdi = {
-        "Emisor": {
-          "Rfc": "",
-          "Nombre": "",
-          "RegimenFiscal": ""
-        },
-        "Receptor": {
-          "Rfc": "",
-          "Nombre": "",
-          "UsoCFDI": ""
-        },
-        "Conceptos": {
-            "Concepto":[]
-        },
-        "Version": "",
-        "Folio": "",
-        "Fecha": "",
-        "FormaPago": "",
-        "CondicionesDePago": "",
-        "Descuento": "",
-        "SubTotal": "",
-        "Moneda": "",
-        "Total": "",
-        "TipoDeComprobante": "",
-        "MetodoPago": "",
-        "LugarExpedicion": ""
+            // "InformacionGlobal":{
+            // },
+            // "CfdiRelacionados":{
+            // },
+            "Emisor": {
+              "Rfc": "",
+              "Nombre": "",
+              "RegimenFiscal": "",
+              "FacAtrAdquirente":""
+            },
+            "Receptor": {
+              "Rfc": "",
+              "Nombre": "",
+              "DomicilioFiscalReceptor":"",
+              "ResidenciaFiscal":"",
+              "NumRegIdTrib":"",
+              "RegimenFiscalReceptor": "",
+              "UsoCFDI": ""
+            },
+            "Conceptos": {"Concepto" : [
+              { 
+                "Impuestos": {
+                },
+                "ClaveProdServ":"",
+                "NoIdentificacion":"",
+                "Cantidad":"",
+                "ClaveUnidad":"",
+                "Unidad":"",
+                "Descripcion":"",
+                "ValorUnitario":"",
+                "Importe":""
+              }
+            ]},
+            "Impuestos": {
+              "Retenciones": {
+                "Retencion" : []
+              },
+              "TotalImpuestosRetenidos":"",
+              "Traslados": {
+                  "Traslado" : []
+              },
+              "TotalImpuestosTrasladados":""
+            },
+            "Version": "4.0",
+            "Folio": "",
+            "Fecha": "",
+            "Sello": "@",
+            "FormaPago": "",
+            "NoCertificado": "",
+            "Certificado": "@",
+            "CondicionesDePago": "",
+            "SubTotal": "0.0",
+            "Descuento": "",
+            "Moneda": "",
+            "TipoCambio": "1.0",
+            "Total": "0.0",
+            "TipoDeComprobante": "I",
+            "Exportacion":"",
+            "MetodoPago": "",
+            "LugarExpedicion": "",
+            "Confirmacion":""      
     };
     #consumirApi = null;
     #contenido_pdf="";
     #contenido_xml="";
     #uuid="";
     #env="sandbox";
+    #errores=[];
+    #callback_timbrado_exitoso=function(){};
 
+    /**
+     * Description. Método para establecer el callback cuando el timbrado fue exitoso.
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21
+     * @param  {function} callback 
+     * @return {void}
+    **/
+    setCallbackTimbradoExitoso(callback)
+    {
+        this.#callback_timbrado_exitoso=callback;
+    }
+    /**
+     * Description. Método para establecer el CFDI, útil cuando se guarda un borrador y tiempo después se quiere retomar para timbrar.
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21
+     * @param  {object} cfdi 
+     * @return {void}
+    **/
+    setCfdi(cfdi)
+    {
+        //Comprobante
+        this.establecerElementos(document,cfdi,".Comprobante");
+
+        //Emisor
+        if(cfdi["Emisor"]!=undefined)
+        {
+            this.establecerElementos(document,cfdi["Emisor"],".Emisor");
+        }
+        
+
+        //Receptor
+        if(cfdi["Receptor"]!=undefined)
+        {
+            this.establecerElementos(document,cfdi["Receptor"],".Receptor"); 
+        }
+        
+
+        //Concepto
+        if(cfdi["Conceptos"]!=undefined)
+        {
+            document.getElementById("tbody_conceptos").innerHTML="";
+            for(var i=0;i<cfdi["Conceptos"]["Concepto"].length;i++)
+            {
+                var fila = this.generar_fila_Concepto();
+                console.log(fila);
+                document.getElementById("tbody_conceptos").insertAdjacentHTML('beforeend',fila);
+                var Concepto = document.querySelectorAll('tr.Concepto');
+                this.establecerElementos(Concepto[i],cfdi["Conceptos"]["Concepto"][i],".Concepto"); 
+
+
+                if(cfdi["Conceptos"]["Concepto"][i]["Impuestos"]!=undefined && cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Traslados"]!=undefined && cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Traslados"]["Traslado"]!=undefined && cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Traslados"]["Traslado"].length>0)            {
+                    for(var j=0;j<cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Traslados"]["Traslado"].length;j++)
+                    {
+                        this.establecerElementos(Concepto[i],cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Traslados"]["Traslado"][j],".Traslado");
+                    } 
+                }
+                if(cfdi["Conceptos"]["Concepto"][i]["Impuestos"]!=undefined && cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Retenciones"]!=undefined && cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Retenciones"]["Retencion"]!=undefined && cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Retenciones"]["Retencion"].length>0)            {
+                    for(var j=0;j<cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Retenciones"]["Retencion"].length;j++)
+                    {
+                        this.establecerElementos(Concepto[i],cfdi["Conceptos"]["Concepto"][i]["Impuestos"]["Retenciones"]["Retencion"][j],".Retencion");
+                    } 
+                }
+            } 
+        }
+
+        this.validarDatos();
+        this.eventos();
+        this.change_Serie();
+    } 
     /**
      * Description. Método para establecer el ambiente: sandbox | production
      * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
@@ -93,7 +202,21 @@ class TimbrarCFDI
    **/
    constructor()
    {
+       this.clickHandlerAgregar_concepto = this.click_agregar_concepto.bind(this);
+       this.changeHandlerConcepto=this.change_Concepto.bind(this);
+       this.clickHandlerEliminarConcepto=this.click_EliminarConcepto.bind(this);
+       this.changeHandlerSerie=this.change_Serie.bind(this);
+       this.clickHandlerTimbrarCFDI=this.click_TimbrarCFDI.bind(this);
+       this.clickHandlerDescargarPDF=this.click_DescargarPDF.bind(this);
+       this.clickHandlerDescargarXML=this.click_DescargarXML.bind(this);
        this.eventos();
+       
+       //Calculando Fecha
+       const fecha = new Date();
+       var temporal=fecha.toISOString();
+       temporal = temporal.substring(0,10)+"T"+temporal.substring(11,19);
+       const btns=document.querySelectorAll('.Comprobante[data-atributo="Fecha"]');
+       btns.forEach(btn => btn.value=temporal);
    }
    /**
     * Description. Método para manejar los eventos al Timbrar un CFDI 3.3
@@ -102,40 +225,228 @@ class TimbrarCFDI
    **/
    eventos()
    {
-        document.getElementById("agregar_concepto").addEventListener("click",(e) => {
-           this.nuevo_concepto();
-        });
-        document.getElementById("TimbrarCFDI33").addEventListener("click",(e) => {
-            document.getElementById("TimbrarCFDI33").disabled=true;
-            this.validarDatos();
-            
-        });
-        document.getElementById("descargar_pdf").addEventListener("click",(e) => {
-            var xmlContent = this.b64toBlob(this.#contenido_pdf, "Application/pdf");
-            xmlContent = URL.createObjectURL(xmlContent);
+       document.getElementById("agregar_concepto").removeEventListener("click",this.clickHandlerAgregar_concepto);
+       document.getElementById("agregar_concepto").addEventListener("click",this.clickHandlerAgregar_concepto);
 
-            var a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = xmlContent;
-            a.download =  this.#uuid+".pdf";
-            a.click();
-            document.body.removeChild(a);
-        });
-        document.getElementById("descargar_xml").addEventListener("click",(e) => {
-            var xmlContent = this.b64toBlob(this.#contenido_xml, "Application/octet-stream");
-            xmlContent = URL.createObjectURL(xmlContent);
-            
-            var a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = xmlContent;
-            a.download =  this.#uuid+".xml";
-            a.click();
-            document.body.removeChild(a);
-        });
-         
+       document.getElementById("Serie").removeEventListener("change",this.changeHandlerSerie);
+       document.getElementById("Serie").addEventListener("change",this.changeHandlerSerie);
+
+       var Emisor=document.querySelectorAll('.Emisor[data-atributo="Rfc"]');
+       for(let i = 0; i < Emisor.length; i++) {
+           Emisor[i].removeEventListener("change", this.changeHandlerSerie);
+           Emisor[i].addEventListener("change", this.changeHandlerSerie);
+        }  
+
+        var ConceptoEliminar = document.getElementsByClassName('ConceptoEliminar');
+        for(let i = 0; i < ConceptoEliminar.length; i++) {
+            ConceptoEliminar[i].removeEventListener("click", this.clickHandlerEliminarConcepto);
+            ConceptoEliminar[i].addEventListener("click", this.clickHandlerEliminarConcepto);
+        }     
+
+        var InputConcepto = document.querySelectorAll('input.Concepto, select.Concepto, .Traslado .TasaOCuota, .Retencion .TasaOCuota');
+        for(let i = 0; i < InputConcepto.length; i++) { 
+            InputConcepto[i].removeEventListener("change", this.changeHandlerConcepto);
+            InputConcepto[i].addEventListener("change", this.changeHandlerConcepto);
+        }
+
+        document.getElementById("TimbrarCFDI").removeEventListener("click",this.clickHandlerTimbrarCFDI);
+        document.getElementById("TimbrarCFDI").addEventListener("click",this.clickHandlerTimbrarCFDI);
+
+        document.getElementById("descargar_pdf").removeEventListener("click",this.clickHandlerDescargarPDF);
+        document.getElementById("descargar_pdf").addEventListener("click",this.clickHandlerDescargarPDF);
+        
+        document.getElementById("descargar_xml").removeEventListener("click",this.clickHandlerDescargarXML);    
+        document.getElementById("descargar_xml").addEventListener("click",this.clickHandlerDescargarXML);        
    }
+    /**
+     * Description. Método para manejar el evento de descargar el XML.
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void}
+    **/
+   click_DescargarXML(){
+        var xmlContent = this.b64toBlob(this.#contenido_xml, "Application/octet-stream");
+        xmlContent = URL.createObjectURL(xmlContent);
+        
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = xmlContent;
+        a.download =  this.#uuid+".xml";
+        a.click();
+        document.body.removeChild(a);
+    }
+    /**
+     * Description. Método para manejar el evento de descargar el PDF.
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void}
+    **/
+   click_DescargarPDF(){
+        var xmlContent = this.b64toBlob(this.#contenido_pdf, "Application/pdf");
+        xmlContent = URL.createObjectURL(xmlContent);
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = xmlContent;
+        a.download =  this.#uuid+".pdf";
+        a.click();
+        document.body.removeChild(a);
+    }
+    /**
+     * Description. Método para manejar el evento del botón para timbrar el CFDI.
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void}
+    **/
+   click_TimbrarCFDI()
+   {
+       document.getElementById("TimbrarCFDI").disabled=true;
+       this.validarDatos(); 
+       if(this.#errores.length==0)
+       {
+           this.timbrar_cfdi();
+       }    
+   }   
+   /**
+     * Description. Método para manejar el evento de cambio de Serie: para obtener el folio consecutivo
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void}
+    **/
+   change_Serie()
+   {
+        var RFCEmisor="";
+        const Emisor=document.querySelectorAll('.Emisor[data-atributo="Rfc"]');
+        Emisor.forEach(e => RFCEmisor=e.value);
+
+        var Serie = document.getElementById("Serie").value;
+        if(RFCEmisor.length>0)
+        {
+            this.obtenerFolio(RFCEmisor, Serie);
+        }
+   }
+   /**
+     * Description. Método para manejar el evento de eliminar un concepto
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @param {object} nodo
+     * @return {void}
+    **/
+   click_EliminarConcepto(nodo)
+   {
+       console.log(nodo.path[0].parentNode.parentNode);
+       var row = nodo.path[0].parentNode.parentNode;
+       if(row!=null && row.parentNode!=null)
+       {
+           row.parentNode.removeChild(row);
+       }
+       this.validarDatos();
+   }
+   /**
+     * Description. Método para manejar el evento de cambio de contenido de los input del Concepto
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void}
+    **/
+   change_Concepto()
+   {
+       this.validarDatos();
+   }
+   /**
+     * Description. Método para manejar el evento de agregar un Concepto
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void}
+    **/
+   click_agregar_concepto()
+   {
+        this.nuevo_concepto();
+        this.eventos();
+   }
+   /**
+     * Description. Método para retornar el contenido de un Concepto (fila en la tabla)
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {string}
+    **/
+   generar_fila_Concepto()
+   {
+       return '<tr class="Concepto"> <td> <input type="text" class="Concepto ClaveProdServ" data-atributo="ClaveProdServ" maxlength="8" minlength="8" value="" placeholder="Requerido" required=""> </td> <td> <input type="text" class="Concepto NoIdentificacion" data-atributo="NoIdentificacion" maxlength="100" value="" placeholder="Opcional"> </td> <td> <input type="text" class="Concepto Cantidad" data-atributo="Cantidad" maxlength="13" value="" placeholder="Requerido"> </td> <td> <select class="Concepto ClaveUnidad" data-atributo="ClaveUnidad"> <option value="H87">H87 - Pieza</option> <option value="EA">EA - Elemento</option> <option value="E48">E48 - Unidad de Servicio</option> <option value="ACT">ACT - Actividad</option> <option value="KGM">KGM - Kilogramo</option> <option value="E51">E51 - Trabajo</option> <option value="A9">A9 - Tarifa</option> <option value="MTR">MTR - Metro</option> <option value="AB">AB - Paquete a granel</option> <option value="BB">BB - Caja base</option> <option value="KT">KT - Kit</option> <option value="SET">SET - Conjunto</option> <option value="LTR">LTR - Litro</option> <option value="XBX">XBX - Caja</option> <option value="MON">MON - Mes </option> <option value="HUR">HUR - Hora</option> <option value="MTK">MTK - Metro cuadrado</option> <option value="11">11 - Equipos</option> <option value="MGM">MGM - Miligramo</option> <option value="XPK">XPK - Paquete</option> <option value="XKI">XKI - Kit (Conjunto de piezas)</option> <option value="AS">AS - Variedad</option> <option value="GRM">GRM - Gramo</option> <option value="PR">PR - Par</option> <option value="DPC">DPC - Docenas de piezas</option> <option value="xun">xun - Unidad</option> <option value="DAY">DAY - Día</option> <option value="XLT">XLT - Lote</option> <option value="10">10 - Grupos</option> <option value="MLT">MLT - Mililitro</option> <option value="E54">E54 - Viaje</option> <option value="ANN">ANN - Año</option> </select> </td> <td> <input type="text" class="Concepto Unidad" data-atributo="Unidad" maxlength="20" value="" placeholder="Opcional"> </td> <td> <input type="text" class="Concepto Descripcion" data-atributo="Descripcion" maxlength="1000" value="" placeholder="Requerido"> </td> <td> <input type="text" class="Concepto ValorUnitario" data-atributo="ValorUnitario" maxlength="13" value="" placeholder="Requerido" required=""> </td> <td> <input type="text" class="Concepto Importe" data-atributo="Importe" maxlength="25" value="" placeholder="Requerido" required=""> </td> <td> <input type="text" class="Concepto Descuento" data-atributo="Descuento" maxlength="25" value="" placeholder="Opcional"> </td> <td> <select class="Concepto ObjetoImp" data-atributo="ObjetoImp"> <option value="01">01 - No objeto de impuesto.</option> <option value="02" selected="">02 - Sí objeto de impuesto..</option> <option value="03">03 - Sí objeto del impuesto y no obligado al desglose.</option> </select> </td> <td> <div class="Traslado"> <input type="hidden" class="Traslado Base" data-atributo="Base" maxlength="25" value="" required="" placeholder=""> <select class="Traslado Impuesto" data-atributo="Impuesto" required=""> <option value="">Selecciona el Impuesto</option> <option value="001">ISR</option> <option value="002" selected="">IVA</option> <option value="003">IEPS</option> </select> <input type="hidden" class="Traslado TipoFactor" data-atributo="TipoFactor" value="Tasa" required="" placeholder=""> <input type="hidden" class="Traslado Importe" data-atributo="Importe" maxlength="25" value="" placeholder=""> <input type="text" class="Traslado TasaOCuota" data-atributo="TasaOCuota" maxlength="6" value="0.16" placeholder=""> </div> </td> <td> <div class="Retencion"> <input type="hidden" class="Retencion Base" data-atributo="Base" maxlength="25" value="" required="" placeholder=""> <input type="hidden" class="Retencion Impuesto" data-atributo="Impuesto" maxlength="25" required="" value="" placeholder=""> <input type="hidden" class="Retencion TipoFactor" data-atributo="TipoFactor" value="Tasa" required="" placeholder=""> <input type="hidden" class="Retencion Importe" data-atributo="Importe" maxlength="25" value="" required="" placeholder=""> <select class="Retencion Impuesto" data-atributo="Impuesto" required=""> <option value="">Selecciona el Impuesto</option> <option value="001">ISR</option> <option value="002">IVA</option> <option value="003">IEPS</option> </select> <input type="text" class="Retencion TasaOCuota" data-atributo="TasaOCuota" maxlength="6" value="" required="" placeholder=""> </div> </td> <td> <span class="ConceptoEliminar">Eliminar</span> <input type="hidden"> </td> </tr>';
+   }
+   /**
+     * Description. Método para retornar el contenido de un Traslado 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {object}
+    **/
+   obtener_TrasladoConceptoBase()
+   {
+    var Traslado = {
+        "Base":"",
+        "Impuesto":"",
+        "TipoFactor":"",
+        "TasaOCuota":"",
+        "Importe":""
+    };
+    return this.clonar(Traslado);
+   }
+   /**
+     * Description. Método para retornar el contenido de una Retención 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {object}
+    **/
+   obtener_RetencionConceptoBase()
+   {
+    var Retencion = {
+        "Base":"",
+        "Impuesto":"",
+        "TipoFactor":"",
+        "TasaOCuota":"",
+        "Importe":""
+    };
+    return this.clonar(Retencion);
+   }
+   /**
+     * Description. Método para retornar el contenido de una Concepto 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {object}
+    **/
+   obtener_ConceptoBase()
+   {
+       var Concepto ={ 
+            "Impuestos": {
+            },
+            "ClaveProdServ":"",
+            "NoIdentificacion":"",
+            "Cantidad":"",
+            "ClaveUnidad":"",
+            "Unidad":"",
+            "Descripcion":"",
+            "ValorUnitario":"",
+            "Importe":"",
+            "Descuento":"",
+            "ObjetoImp":""
+        };
+        return this.clonar(Concepto);
+   }
+   /**
+     * Description. Método para clonar un objeto. 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @param {object} obj
+     * @return {object}
+    **/
+   clonar(obj) {
+        if(obj == null || typeof(obj) != 'object')
+            return obj;    
+        var temp = new obj.constructor(); 
+        for(var key in obj)
+            temp[key] = this.clonar(obj[key]);    
+        return temp;
+    }
    /**
     * Description. Método para convertir un string en base64 en blob
     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
@@ -169,12 +480,222 @@ class TimbrarCFDI
    **/
    nuevo_concepto()
    {
-        var itm = document.getElementsByClassName("concepto_item");
-        if(itm.length>0)
+        var fila = this.generar_fila_Concepto();
+        document.getElementById("tbody_conceptos").insertAdjacentHTML('beforeend',fila);
+   }
+   /**
+     * Description. Método para establecer (llenar) los campos de HTML con base en un objeto de Javascript 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @param {object} nodoPadre
+     * @param {object} nodo
+     * @param {string} nombreNodo
+     * @param {int} indexNodo
+     * @return {void}
+    **/
+   establecerElementos(nodoPadre, nodo, nombreNodo, indexNodo)
+   {
+        const keys_Comprobante = Object.keys(nodo);
+        keys_Comprobante.forEach((key, index) => {
+            if(this.esAtributo(nodo[key]))
+            {
+                var ComprobanteAtributos=nodoPadre.querySelectorAll(nombreNodo+'[data-atributo="'+key+'"]');
+                console.log(key);
+                console.log(ComprobanteAtributos);
+                if(indexNodo!=undefined && ComprobanteAtributos.length>0)
+                {
+                    console.log(ComprobanteAtributos);
+                    console.log(indexNodo);
+                    var Temporal = [];
+                    Temporal.push(ComprobanteAtributos[indexNodo].cloneNode(true));
+                    ComprobanteAtributos=Temporal;
+                }
+                ComprobanteAtributos.forEach(atributo => {
+                    atributo.value=nodo[key];
+                });
+            }
+        });
+   }
+   /**
+     * Description. Método para obtener los campos de HTML y llenarlos en un objeto de Javascript 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @param {object} nodoPadre
+     * @param {object} nodo
+     * @param {string} nombreNodo
+     * @param {int} indexNodo
+     * @return {object} Errores
+    **/
+   obtenerElementos(nodoPadre, nodo, nombreNodo, indexNodo)
+   {
+       var Errores = [];
+       const keys_Comprobante = Object.keys(nodo);
+       keys_Comprobante.forEach((key, index) => {
+            if(this.esAtributo(nodo[key]))
+            {
+                var ComprobanteAtributos=nodoPadre.querySelectorAll(nombreNodo+'[data-atributo="'+key+'"]');
+                if(indexNodo!=undefined && ComprobanteAtributos.length>0)
+                {
+                    var Temporal = [];
+                    Temporal.push(ComprobanteAtributos[indexNodo].cloneNode(true));
+                    ComprobanteAtributos=Temporal;
+                }
+                ComprobanteAtributos.forEach(atributo => {
+                    nodo[key]=atributo.value.trim();
+                    if(atributo.required && atributo.value=="")
+                    {
+                        Errores.push("El campo "+nombreNodo+"."+key+" es requerido");
+                    }
+                });
+            }
+        });
+        return Errores;
+   }
+   /**
+     * Description. Método para calcular los impuestos de cada Concepto 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void} 
+    **/
+   calculoTrasladoRetencionConcepto()
+   { 
+        var Concepto = document.querySelectorAll("tr.Concepto");
+        var ImporteImpuestoTraslado=0.0;
+        var ImporteImpuestoRetencion=0.0;
+        for(var i = 0;i<Concepto.length;i++)
         {
-            var cln = itm[itm.length-1].cloneNode(true);
-            document.getElementById("tbody_conceptos").appendChild(cln);
+            var Descuento=0.0;
+            var Importe = 0.0;
+            var Cantidad=0.0;
+            var ValorUnitario=0.0;
+            var BaseImpuesto=0.0;
+
+            Descuento=Concepto[i].querySelector('.Concepto .Descuento').value;
+            if(Descuento!="")
+            {
+                Descuento=parseFloat(Descuento); 
+            }
+            else
+            {
+                Descuento=0.0;
+            }
+            Concepto[i].querySelector('.Concepto .Unidad').value=Concepto[i].querySelector('.Concepto .ClaveUnidad').value;
+            Cantidad=Concepto[i].querySelector('.Concepto .Cantidad').value;
+            Cantidad=parseFloat(Cantidad);
+            if(isNaN(Cantidad))
+            {
+                Cantidad=0.0;
+            }
+
+            ValorUnitario=Concepto[i].querySelector('.Concepto .ValorUnitario').value; 
+            ValorUnitario=parseFloat(ValorUnitario);
+            if(isNaN(ValorUnitario))
+            {
+                ValorUnitario=0.0;
+            }
+              
+            Importe = Cantidad * ValorUnitario;
+            Importe = this.redondear(Importe);
+            if(isNaN(Importe))
+            {
+                Importe=0.0;
+            }
+
+            Concepto[i].querySelector('.Concepto .Cantidad').value=Cantidad;
+            Concepto[i].querySelector('.Concepto .ValorUnitario').value=ValorUnitario;
+            Concepto[i].querySelector('.Concepto .Importe').value=Importe;
+            Concepto[i].querySelector('.Concepto .Descuento').value=Descuento;
+
+
+
+            BaseImpuesto = parseFloat(Importe - Descuento);
+            if(isNaN(BaseImpuesto))
+            {
+                BaseImpuesto=0.0;
+            } 
+            //Traslado
+            if(Concepto[i].querySelector(".Traslado .TasaOCuota").value!="")
+            {   
+                ImporteImpuestoTraslado = parseFloat(Concepto[i].querySelector('.Traslado .TasaOCuota').value) * BaseImpuesto;
+                ImporteImpuestoTraslado=this.redondear(ImporteImpuestoTraslado);
+                Concepto[i].querySelector('.Traslado .Base').value=BaseImpuesto;
+                Concepto[i].querySelector('.Traslado .TipoFactor').value="Tasa";
+                Concepto[i].querySelector('.Traslado .Importe').value=ImporteImpuestoTraslado;
+            }
+            
+            //Retencion
+            if(Concepto[i].querySelector(".Retencion .TasaOCuota").value!="")
+            {
+                ImporteImpuestoRetencion = parseFloat(Concepto[i].querySelector('.Retencion .TasaOCuota').value) * BaseImpuesto;
+                ImporteImpuestoRetencion=this.redondear(ImporteImpuestoRetencion);
+                Concepto[i].querySelector('.Retencion .Base').value=BaseImpuesto;   
+                Concepto[i].querySelector('.Retencion .TipoFactor').value="Tasa";
+                Concepto[i].querySelector('.Retencion .Importe').value=ImporteImpuestoRetencion;
+            }    
         }
+        this.mostrarDesgloseTotales(this.#cfdi);
+   }
+   /**
+     * Description. Método para mostrar el desglose de totales: SubTotal, Descuento, TotalImpuestosTrasladados, TotalImpuestosRetenidos, Total 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @param {object} cfdi
+     * @return {void} 
+    **/
+   mostrarDesgloseTotales(cfdi)
+   {
+        if(cfdi==undefined)
+        {
+            cfdi = this.#cfdi;
+        }
+        //Cálculo del desglose de Totales
+        var SubTotal=0.0;
+        var Descuento=0.0;
+        var TotalImpuestosTrasladados=0.0;
+        var TotalImpuestosRetenidos=0.0;
+        var Total=0.0;
+        if(cfdi.SubTotal!=undefined)
+        {
+            SubTotal=cfdi.SubTotal;
+            this.redondear(SubTotal);
+        }
+        if(cfdi.Descuento!=undefined)
+        {
+            Descuento=cfdi.Descuento;
+            this.redondear(Descuento);
+        }
+        if(cfdi.Impuestos!=undefined && cfdi.Impuestos.TotalImpuestosTrasladados!=undefined)
+        {
+            TotalImpuestosTrasladados=cfdi.Impuestos.TotalImpuestosTrasladados;
+            this.redondear(TotalImpuestosTrasladados);
+        }
+        else
+        {
+            TotalImpuestosTrasladados=0.0; 
+        }
+        if(cfdi.Impuestos!=undefined && cfdi.Impuestos.TotalImpuestosRetenidos!=undefined)
+        {
+            TotalImpuestosRetenidos=cfdi.Impuestos.TotalImpuestosRetenidos;
+            this.redondear(TotalImpuestosRetenidos);
+        }
+        else
+        {
+            TotalImpuestosRetenidos=0.0; 
+        }
+        if(cfdi.Total!=undefined)
+        {
+            Total=cfdi.Total;
+            this.redondear(Total);
+        }
+        else
+        {
+            Total = 0.0;
+        }
+        document.getElementById("DesgloseTotales_SubTotal").innerHTML="$ "+this.numberWithCommas(SubTotal);
+        document.getElementById("DesgloseTotales_Descuento").innerHTML="$ "+this.numberWithCommas(Descuento);
+        document.getElementById("DesgloseTotales_ImpuestosTrasladados").innerHTML="$ "+this.numberWithCommas(TotalImpuestosTrasladados);
+        document.getElementById("DesgloseTotales_ImpuestosRetenidos").innerHTML="$ "+this.numberWithCommas(TotalImpuestosRetenidos);
+        document.getElementById("DesgloseTotales_Total").innerHTML="$ "+this.numberWithCommas(Total);
    }
    /**
      * Description. Método para llenar el objeto que se enviará a la API de Fiscus CFDI para timbrar
@@ -184,6 +705,7 @@ class TimbrarCFDI
     **/
    validarDatos()
    {
+       var Errores = [];
        var Descuento=0.0;
        var TotalImpuestosRetenidos=0.0;
        var TotalImpuestosTrasladados=0.0;
@@ -192,214 +714,269 @@ class TimbrarCFDI
        var SubTotal=0.0;
        var Total=0.0;
 
-
+       //General 
+        var ErroresComprobante = this.obtenerElementos(document,this.#cfdi, ".Comprobante");
+        Errores=Errores.concat(ErroresComprobante);
+        
        //Emisor
-       this.#cfdi["Emisor"]["Rfc"] = document.getElementById("rfc_emisor").value;
-       this.#cfdi["Emisor"]["Nombre"] = document.getElementById("razon_social_emisor").value;
-       this.#cfdi["Emisor"]["RegimenFiscal"] = document.getElementById("regimen_fiscal_emisor").value;
-    
+       var ErroresEmisor = this.obtenerElementos(document,this.#cfdi["Emisor"], ".Emisor");
+       Errores=Errores.concat(ErroresEmisor);
+
        //Receptor
-       this.#cfdi["Receptor"]["Rfc"] = document.getElementById("rfc_receptor").value;
-       this.#cfdi["Receptor"]["Nombre"] = document.getElementById("razon_social_receptor").value;
-       this.#cfdi["Receptor"]["UsoCFDI"] = document.getElementById("uso_cfdi_receptor").value;
+       var ErroresReceptor = this.obtenerElementos(document,this.#cfdi["Receptor"], ".Receptor");
+       Errores=Errores.concat(ErroresReceptor);
 
        //Conceptos
        this.#cfdi["Conceptos"]["Concepto"]=[];
-       var concepto = document.getElementsByClassName("concepto_item");
-       var item_concepto={
-                "Impuestos": {
-                   "Traslados": {
-                       "Traslado":[]
-                   },
-                   "Retenciones":{
-                       "Retencion":[]
-                   }
-                }
-        };
-       var llaves=["ClaveProdServ", "NoIdentificacion", "Cantidad", "ClaveUnidad", "Unidad", "Descripcion", "ValorUnitario", "Importe", "Descuento", "Traslados", "Retenciones"];
+       this.calculoTrasladoRetencionConcepto();
+       var Concepto = document.querySelectorAll("tr.Concepto");
        var ImporteImpuesto=0.0;
-       for(var i = 0;i<concepto.length;i++)
+       for(var i = 0;i<Concepto.length;i++)
        {
-            item_concepto={
-                "Impuestos": {
-                    "Traslados": {
-                        "Traslado":[]
-                    },
-                    "Retenciones":{
-                        "Retencion":[]
-                    }
-                }
-            };
-           for (var j = 0; j < llaves.length; j++)
+           var item_concepto=this.obtener_ConceptoBase();
+           var ErroresConcepto = this.obtenerElementos(document,item_concepto, ".Concepto",i);
+           Errores=Errores.concat(ErroresConcepto);
+           SubTotal+= this.redondear(parseFloat(item_concepto.Importe));
+           if(item_concepto.Descuento!=undefined && item_concepto.Descuento!="")
            {
-               if(concepto[i].querySelector('.'+llaves[j]).value.length>0)
-               {
-                   if(llaves[j]=="Traslados")
-                   {
-                       ImporteImpuesto=0.0;
-                       ImporteImpuesto = parseFloat(concepto[i].querySelector('.TasaOCuotaTraslados').value) * parseFloat(concepto[i].querySelector('.Importe').value);
-                       ImporteImpuesto=this.redondear(ImporteImpuesto);
-                       TotalImpuestosTrasladados=TotalImpuestosTrasladados+ImporteImpuesto;
+               Descuento+= this.redondear(parseFloat(item_concepto.Descuento));
+           }
+           item_concepto.Impuestos={
+                "Traslados":{
+                    "Traslado":[]
+                },
+                "Retenciones":{
+                    "Retencion":[]
+                }
+            }
+           
+            //Traslado
+           if(Concepto[i].querySelector(".Traslado .TasaOCuota").value!="")
+           {
+               var Traslado = this.obtener_TrasladoConceptoBase();
+               var ErroresTraslado = this.obtenerElementos(Concepto[i],Traslado, ".Traslado"); 
+               Errores=Errores.concat(ErroresTraslado);
+               item_concepto.Impuestos.Traslados={"Traslado":[]};
+               item_concepto.Impuestos.Traslados.Traslado.push(Traslado);
+           }
+           else
+           {
+               item_concepto.Impuestos.Traslados=[];
+           }
+           
+           //Retencion
+           if(Concepto[i].querySelector(".Retencion .TasaOCuota").value!="")
+           {
+               var Retencion = this.obtener_RetencionConceptoBase();
+               var ErroresRetencion = this.obtenerElementos(Concepto[i],Retencion, ".Retencion");
+               Errores=Errores.concat(ErroresRetencion);
+               item_concepto.Impuestos.Retenciones={"Retencion":[]};
+               item_concepto.Impuestos.Retenciones.Retencion.push(Retencion);
+           }
+           else
+           {
+               item_concepto.Impuestos.Retenciones=[];
+           }
+           
+           this.#cfdi["Conceptos"]["Concepto"].push(item_concepto);
+       }
+       
+       //Impuestos
+       this.traslados_root();
+       this.retenciones_root(); 
 
-                        //Traslado a nivel de 'Concepto'                      
-                        item_concepto["Impuestos"]["Traslados"]["Traslado"].push({
-                            "Base": concepto[i].querySelector('.Importe').value,
-                            "Impuesto": ""+concepto[i].querySelector('.Traslados').value,
-                            "TipoFactor": "Tasa",
-                            "TasaOCuota": concepto[i].querySelector('.TasaOCuotaTraslados').value,
-                            "Importe": ImporteImpuesto
-                        });
-
-                        //Traslado a nivel de Impuesto de root (Comprobante)
-                        Traslado.push({
-                            "Impuesto": ""+concepto[i].querySelector('.Traslados').value,
-                            "TipoFactor": "Tasa",
-                            "TasaOCuota": concepto[i].querySelector('.TasaOCuotaTraslados').value,
-                            "Importe": ImporteImpuesto
-                        });
-                   }
-                   else
-                   {
-                        if(llaves[j]=="Retenciones")
-                        {
-                            ImporteImpuesto=0.0;
-                            ImporteImpuesto = parseFloat(concepto[i].querySelector('.TasaOCuotaRetenciones').value) * parseFloat(concepto[i].querySelector('.Importe').value);
-                            ImporteImpuesto=this.redondear(ImporteImpuesto);
-                            TotalImpuestosRetenidos=TotalImpuestosRetenidos+ImporteImpuesto;
-
-                                //Retención a nivel de 'Concepto'                      
-                                item_concepto["Impuestos"]["Retenciones"]["Retencion"].push({
-                                    "Base": concepto[i].querySelector('.Importe').value,
-                                    "Impuesto": ""+concepto[i].querySelector('.Retenciones').value,
-                                    "TipoFactor": "Tasa",
-                                    "TasaOCuota": concepto[i].querySelector('.TasaOCuotaRetenciones').value,
-                                    "Importe": ImporteImpuesto
-                                });
-
-                                //Retención a nivel de Impuesto de root (Comprobante)
-                                Retencion.push({
-                                    "Impuesto": ""+concepto[i].querySelector('.Retenciones').value,
-                                    "Importe": ImporteImpuesto
-                                });
-                        }
-                        else
-                        {
-                            item_concepto[llaves[j]]=concepto[i].querySelector('.'+llaves[j]).value;
-                            switch(llaves[j])
-                            {
-                                case "Descuento":
-                                    if(parseFloat(concepto[i].querySelector('.'+llaves[j]).value)!==NaN)
-                                    {
-                                        Descuento=Descuento+parseFloat(concepto[i].querySelector('.'+llaves[j]).value);
-                                    }
-                                    break;
-                                case "Importe":
-                                    if(parseFloat(concepto[i].querySelector('.'+llaves[j]).value)!==NaN)
-                                    {
-                                        SubTotal=SubTotal+parseFloat(concepto[i].querySelector('.'+llaves[j]).value);
-                                    }
-                                        
-                                    break;
-                            }
-                        }
-                   }
-               }
-               else
-               {
-                 if(concepto[i].querySelector('.'+llaves[j]).getAttribute("required")!=null)
-                 {
-                     alert("La "+llaves[j]+" es requerida");
-                 }
-               }
-            } 
-            if(item_concepto["Impuestos"]["Traslados"]["Traslado"].length==0)
-                delete item_concepto["Impuestos"]["Traslados"];
-            if(item_concepto["Impuestos"]["Retenciones"]["Retencion"].length==0)
-                delete item_concepto["Impuestos"]["Retenciones"];
-
-            this.#cfdi["Conceptos"]["Concepto"].push(item_concepto);
+       if(this.#cfdi.Impuestos.TotalImpuestosTrasladados!=undefined)
+       {
+           TotalImpuestosTrasladados=this.#cfdi.Impuestos.TotalImpuestosTrasladados;
+       }
+       if(this.#cfdi.Impuestos.TotalImpuestosRetenidos!=undefined)
+       {
+           TotalImpuestosRetenidos=this.#cfdi.Impuestos.TotalImpuestosRetenidos;
        }
 
-       //Impuestos
-       this.#cfdi["Impuestos"]={
-            "TotalImpuestosTrasladados": 0.0,
-            "TotalImpuestosRetenidos": 0.0,
-            "Retenciones": 
-            {
-                "Retencion":[]
-            },
-            "Traslados": {
-                  "Traslado": []               
-            }
-        };
-        if(TotalImpuestosTrasladados==0.0){
-            delete this.#cfdi["Impuestos"]["TotalImpuestosTrasladados"];
-            delete this.#cfdi["Impuestos"]["Traslados"];
-        }
-        else
-        {
-            this.#cfdi["Impuestos"]["TotalImpuestosTrasladados"]=TotalImpuestosTrasladados;
-            for(var i=0;i<Traslado.length;i++)
-            {
-                this.#cfdi["Impuestos"]["Traslados"]["Traslado"].push(Traslado[i])
-            }
-        }
-        if(TotalImpuestosRetenidos==0.0){
-            delete this.#cfdi["Impuestos"]["TotalImpuestosRetenidos"];
-            delete this.#cfdi["Impuestos"]["Retenciones"];
-        }
-        else
-        {   
-            this.#cfdi["Impuestos"]["TotalImpuestosRetenidos"]=TotalImpuestosRetenidos;
-            for(var i=0;i<Retencion.length;i++)
-            {
-                this.#cfdi["Impuestos"]["Retenciones"]["Retencion"].push(Retencion[i])
-            }
-        }
-
-
-
-        //Descuentos
-        if(Descuento==0.0)
-        {
-            delete this.#cfdi["Descuento"];
-        }
-        else
-        {
-            this.#cfdi["Descuento"]=Descuento;
-        }
-
         //Cálculo Final
-        Total = SubTotal-TotalImpuestosRetenidos+TotalImpuestosTrasladados-Descuento;
-        Total = this.redondear(Total);
+        console.log(SubTotal);
+        console.log(TotalImpuestosRetenidos);
+        console.log(TotalImpuestosTrasladados);
+        console.log(Descuento);
+        Total = parseFloat(SubTotal)-parseFloat(TotalImpuestosRetenidos)+parseFloat(TotalImpuestosTrasladados)-parseFloat(Descuento);
+        Total = this.redondear(Total);  
 
+        this.#cfdi["Descuento"]=this.redondear(Descuento);
+        this.#cfdi["SubTotal"]=this.redondear(SubTotal);
+        this.#cfdi["Total"]=this.redondear(Total); 
 
-       //General
-       this.#cfdi["Version"] = document.getElementById("Version").value;
-       this.#cfdi["Folio"] = document.getElementById("Folio").value;
-       this.#cfdi["Fecha"] = document.getElementById("Fecha").value;
-       this.#cfdi["FormaPago"] = document.getElementById("FormaPago").value;
-       this.#cfdi["CondicionesDePago"] = document.getElementById("CondicionesDePago").value;
-       this.#cfdi["SubTotal"] = SubTotal;
-       this.#cfdi["Moneda"] = document.getElementById("Moneda").value;
-       this.#cfdi["Total"] = Total;
-       this.#cfdi["TipoDeComprobante"] = document.getElementById("TipoDeComprobante").value;
-       this.#cfdi["MetodoPago"] = document.getElementById("MetodoPago").value;
-       this.#cfdi["LugarExpedicion"] = document.getElementById("LugarExpedicion").value;
-       
+        this.limpiar_cfdi(this.#cfdi);
+        console.log(this.#cfdi);
+        console.log(Errores);
 
-       document.getElementById("SubTotal").value=SubTotal;
-       document.getElementById("Total").value=Total;
-       console.log(this.#cfdi);
+        if(Errores.length>0)
+        {
+           document.getElementById("TimbrarCFDI").disabled=false;
+           document.getElementById("Errores").innerHTML=Errores.join('<br>');
+        }
+        this.#errores=Errores;
 
+        //Comprobante
+        this.establecerElementos(document,this.#cfdi,".Comprobante");
 
-       //Quitar los campos que estén en blanco/vacios
-       this.#cfdi=this.limpiar_cfdi(this.#cfdi);
+        this.mostrarDesgloseTotales(this.#cfdi);
+    }
+    /**
+     * Description. Método para calcular los impuestos Globales Retenidos 
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @return {void} 
+    **/
+    retenciones_root(){
+        this.#cfdi.Impuestos.TotalImpuestosRetenidos = 0;
+        this.#cfdi.Impuestos.Retenciones = {};
+        this.#cfdi.Impuestos.Retenciones.Retencion = [];
+    
+        var claves_visitadas = [];      // Array para almacenar las claves de imuestos que ya han sido visitadas
+    
+        for(var i = 0; i < this.#cfdi.Conceptos.Concepto.length; i++){
+          if (this.#cfdi.Conceptos.Concepto[i].Impuestos != undefined && this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones != undefined && this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones.Retencion != undefined) {
+            for(var j = 0; j < this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones.Retencion.length; j++){
+              var impuestos_retenidos = this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones.Retencion[j];
+    
+              var clave = impuestos_retenidos.Impuesto;      // Obtiene la clave del impuesto
+              if (!claves_visitadas.includes(clave)) {
+                // Si no existe se crea un elemento en el array con los datos de la retención
+                claves_visitadas.push(clave);     // Agrega elemento a lista de claves visitadas
+    
+                // Copiar json de traslado por referencia y agregarlo a impuestos de la retención
+                var traslado_concepto = this.clonar(this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones.Retencion[j]);
+                traslado_concepto.Importe=this.redondear(traslado_concepto.Importe);
+                delete traslado_concepto.Base;
+                delete traslado_concepto.TipoFactor; 
+                delete traslado_concepto.TasaOCuota;
+                this.#cfdi.Impuestos.Retenciones.Retencion.push(traslado_concepto);
+              } else {
+                // Si existe, suma el elemento se suma el importe al elemento cuyo clave de importe coincide con el examinado
+                for (var k = 0; k < this.#cfdi.Impuestos.Retenciones.Retencion.length; k++) {
+                  if (this.#cfdi.Impuestos.Retenciones.Retencion[k].Impuesto == clave) {
+                    this.#cfdi.Impuestos.Retenciones.Retencion[k].Importe =  this.redondear(this.#cfdi.Impuestos.Retenciones.Retencion[k].Importe) +this.redondear(impuestos_retenidos.Importe);
+                    this.#cfdi.Impuestos.Retenciones.Retencion[k].Importe=this.redondear(this.#cfdi.Impuestos.Retenciones.Retencion[k].Importe);
+                  }
+                }
+              }
+    
+              this.#cfdi.Impuestos.TotalImpuestosRetenidos = this.redondear(this.#cfdi.Impuestos.TotalImpuestosRetenidos) + this.redondear(this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones.Retencion[j].Importe);
+            }
+          }
+    
+        }    
+        this.#cfdi.Impuestos.TotalImpuestosRetenidos = this.redondear(this.#cfdi.Impuestos.TotalImpuestosRetenidos);
 
-
-
-       this.timbrar_cfdi();
-   }
+        if (this.#cfdi.Impuestos.TotalImpuestosRetenidos == 0) {
+          delete this.#cfdi.Impuestos.TotalImpuestosRetenidos;
+        }    
+        if(this.#cfdi.Impuestos.Retenciones.Retencion.length == 0){
+          delete this.#cfdi.Impuestos.Retenciones;
+        }    
+        for (var i = 0; i < this.#cfdi.Conceptos.Concepto.length; i++) {
+          if (this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones ==undefined || Array.isArray(this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones) || this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones.Retencion.length == 0) {
+            delete this.#cfdi.Conceptos.Concepto[i].Impuestos.Retenciones;
+          }
+        }
+      }
+        /**
+         * Description. Método para calcular los impuestos Globales Trasladados 
+         * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+         * @date   2022-03-21 
+         * @return {void} 
+        **/
+      traslados_root(){
+        this.#cfdi.Impuestos.TotalImpuestosTrasladados = 0;
+        this.#cfdi.Impuestos.Traslados = {};
+        this.#cfdi.Impuestos.Traslados.Traslado = [];
+    
+        var claves_visitadas = [];      // Array para almacenar las claves de impuestos que ya han sido visitadas
+        
+        for (var i = 0; i < this.#cfdi.Conceptos.Concepto.length; i++)
+        {
+            if(this.#cfdi.Conceptos.Concepto[i].Impuestos==undefined || this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados==undefined)
+            {
+                break;
+            }
+            for (var j = 0; j < this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados.Traslado.length; j++)
+            {
+                var impuestos_trasladados = this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados.Traslado[j];
+                var clave = impuestos_trasladados.Impuesto;      // Obtiene la clave del impuesto (ej. "002" => iva, "001"=>isr)
+        
+                if(!claves_visitadas.includes(clave))
+                {
+                    // Si no existe se crea un elemento en el array con los datos del traslado
+                    claves_visitadas.push(clave);     // Agrega elemento a lista de claves visitadas
+                    // Copiar json de traslado por referencia y agregarlo a impuestos trasladados
+                    var traslado_concepto = this.clonar(this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados.Traslado[j]);
+                    traslado_concepto.Importe=this.redondear(traslado_concepto.Importe);
+                    traslado_concepto.Base=this.redondear(traslado_concepto.Base);
+                    this.#cfdi.Impuestos.Traslados.Traslado.push(traslado_concepto);
+                }
+                else
+                {
+                    //checar que coincida el impuesto (ej. "002"=>iva) y luego checar que tenga la misma TasaOCuota (ej. 0.08 ó 0.16)
+                    var index_traslado=-1;
+                    for (var k = 0; k < this.#cfdi.Impuestos.Traslados.Traslado.length; k++)
+                    {
+                        if (this.#cfdi.Impuestos.Traslados.Traslado[k].Impuesto == clave && this.#cfdi.Impuestos.Traslados.Traslado[k].TasaOCuota==impuestos_trasladados.TasaOCuota)
+                        {
+                            index_traslado=k;
+                            break;
+                        }
+                    }
+                    if(index_traslado==-1)
+                    {
+                        //Si existe la clave de impuesto (ej. "002"=>iva), pero quizá tiene una TasaOCuota diferente (0.08 ó 0.16)
+                        //  ->Hay que crear un nuevo nodo
+                        // Copiar json de traslado por referencia y agregarlo a impuestos trasladados
+                        var traslado_concepto = this.clonar(this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados.Traslado[j]);
+                        traslado_concepto.Importe=this.redondear(traslado_concepto.Importe); 
+                        traslado_concepto.Base=this.redondear(traslado_concepto.Base);
+                        this.#cfdi.Impuestos.Traslados.Traslado.push(traslado_concepto);
+                    }
+                    else
+                    {
+                        // Si existe, suma el elemento se suma el importe al elemento cuyo clave de importe coincide con el examinado
+                        this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Importe = this.redondear(this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Importe) + this.redondear(impuestos_trasladados.Importe);
+                        this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Importe = this.redondear(this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Importe);
+                        
+                        this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Base = this.redondear(this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Base) + this.redondear(impuestos_trasladados.Base);
+                        this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Base = this.redondear(this.#cfdi.Impuestos.Traslados.Traslado[index_traslado].Base);
+                    }
+        
+                }
+                this.#cfdi.Impuestos.TotalImpuestosTrasladados += this.redondear(this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados.Traslado[j].Importe);
+            }
+        }
+        this.#cfdi.Impuestos.TotalImpuestosTrasladados = this.redondear(this.#cfdi.Impuestos.TotalImpuestosTrasladados);
+    
+        if(this.#cfdi.Impuestos.Traslados.Traslado.length == 0)
+        {
+          delete this.#cfdi.Impuestos.Traslados;
+        }
+    
+        for (var i = 0; i < this.#cfdi.Conceptos.Concepto.length; i++)
+        {
+          if (this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados==undefined || this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados.Traslado.length == 0)
+          {
+            delete this.#cfdi.Conceptos.Concepto[i].Impuestos.Traslados;
+          }
+        }
+      }
+  
+    /**
+     * Description. Método para saber si un objeto es atributo o es nodo
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21 
+     * @param {object|string} input
+     * @return {boolean} 
+    **/
+    esAtributo(input) {
+        return input!=null && !Array.isArray(input) && typeof(input) !== 'object';
+    }
    /**
      * Description. Método para limpiar el objeto de CFDI, las propiedades vacias se eliminan
      * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
@@ -409,24 +986,24 @@ class TimbrarCFDI
     **/
    limpiar_cfdi(cfdi)
    {
-        var value=null;
-        for(var key in cfdi)
-        { 
-            value=cfdi[key];
-            if(value === "" || value === null)
+        var self = this;
+        var excluir_claves = ['TasaOCuota','Importe','TotalImpuestosTrasladados','SubTotal','Total'];
+        Object.keys(cfdi).forEach(function(clave){
+        if(cfdi[clave] && typeof cfdi[clave] == 'object' && Object.keys(cfdi[clave]).length > 0){
+            console.log(cfdi);
+            console.log(clave);
+            self.limpiar_cfdi(cfdi[clave]);
+        }
+        else if(typeof cfdi[clave] == 'object' && Object.keys(cfdi[clave]).length == 0){
+            delete cfdi[clave];
+        }
+        else if(cfdi[clave] == null || cfdi[clave] == undefined || cfdi[clave] == '' || cfdi[clave] == 0){
+            if(!excluir_claves.includes(clave))
             {
-                delete cfdi[key];
+                delete cfdi[clave];
             }
-            else if(Object.prototype.toString.call(value) === '[object Object]')
-            {
-                this.limpiar_cfdi(value);
-            }
-            else if(Array.isArray(value))
-            {
-                value.forEach( (el) => { this.limpiar_cfdi(el); });
-            }
-        };
-        return cfdi;
+        }
+        });
    }
    /**
      * Description. Método para hacer la conexión a la API
@@ -440,12 +1017,13 @@ class TimbrarCFDI
             "env":this.#env,
             "token":"-1",
             "cfdi": JSON.stringify(this.#cfdi)
-       };
+        };
+        document.getElementById("Errores").innerHTML="";
         this.#consumirApi.api_timbrar_cfdi(timbrar, (datos)=>{
             //Respuesta del servidor
             console.log(datos);
-            alert(JSON.stringify(datos));
-            if(datos["http_estatus"]==202)
+            
+            if(datos["http_estatus"]==202) 
             {
                 document.getElementById("timbrar_cfdi").style.display="none";
                 document.getElementById("descarga").style.visibility="visible";
@@ -453,8 +1031,18 @@ class TimbrarCFDI
                 this.#contenido_pdf = datos["json_respuesta"]["pdf"];
                 this.#contenido_xml = datos["json_respuesta"]["xml"];
                 this.#uuid = datos["json_respuesta"]["uuid"];
+
+                this.#callback_timbrado_exitoso(datos);
             }
-            document.getElementById("TimbrarCFDI33").disabled=false;
+            else
+            {
+                document.getElementById("Errores").innerHTML=datos.mensaje;
+                if(!Array.isArray(datos.json_respuesta))
+                {
+                    document.getElementById("Errores").innerHTML=document.getElementById("Errores").innerHTML+" "+datos.json_respuesta.errores;
+                } 
+            }
+            document.getElementById("TimbrarCFDI").disabled=false;
         });
    }
    /**
@@ -464,8 +1052,56 @@ class TimbrarCFDI
      * @param {number} numero
      * @return {number} 
     **/
-   redondear(numero)
+   redondear(numero) 
    {
-       return (Math.round(numero * 100) / 100);
+       numero=(Math.round(numero * 100) / 100);
+       numero=numero.toFixed(2);
+       numero = parseFloat(numero);
+       return numero;
    }
+   /**
+     * Description. Método para formatear con coma los números, ej. 1000 => 1,000
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2019-08-26
+     * @param {number} x
+     * @return {string} 
+    **/
+   numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+   }
+   /**
+     * Description. Método para hacer la conexión a la API, y obtener el Folio consecutivo
+     * @author Tecnología Globalbtek <Fiscus CFDI> globalbtek.com | fiscuscfdi.com
+     * @date   2022-03-21
+     * @param {string} RFCEmisor
+     * @param {string} Serie
+     * @return {void}
+    **/
+   obtenerFolio(RFCEmisor, Serie)
+   {
+       var infoEmisor = {
+           "env":this.#env,
+           "token":"",
+           "rfc":RFCEmisor,        
+           //VARIABLES OPCIONALES
+           "serie":Serie,
+        };
+        this.#consumirApi.api_obtener_folio(infoEmisor, (datos)=>{
+            //Respuesta del servidor
+            console.log(datos);
+            var Folio=1;
+            if(datos.json_respuesta!=undefined)
+            {
+                if(datos.json_respuesta!=undefined && !Array.isArray(datos.json_respuesta))
+                {
+                    Folio=datos.json_respuesta.folio;
+                }   
+                else
+                {
+                    document.getElementById("Errores").innerHTML=JSON.stringify(datos);
+                }
+            }
+            document.getElementById("Folio").value=Folio;
+        });
+   }    
 }
