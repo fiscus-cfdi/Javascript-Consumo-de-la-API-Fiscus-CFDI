@@ -8,11 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Agregar RFC</title>
-    <link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
+    <link rel="stylesheet" type="text/css" href="./../lib/css/fiscus_cfdi.css" >
 </head>
 
 <body>
-    <img src="img/fiscus_cfdi.png"><br>
+    
 
     <!-- Información Requerida para obtener el siguiente folio -->
     <input type="text" maxlength="13" id="rfc" placeholder="RFC del emisor" value="" required>
@@ -22,8 +22,11 @@
     <br>
     <button id="agregar_obtener_folio"> Obtener folio </button>
 
-    <script type="text/javascript" src="js/consumo_api.js"></script>
-    <script type="text/javascript" src="js/obtener_folio.js"></script>
+    <!--
+<script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
+-->
+<script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
+    <script type="text/javascript" src="./../lib/js/obtener_folio.js"></script>
     <script type="text/javascript">
         (function () {
             var consumo_api=new ConsumirApi();

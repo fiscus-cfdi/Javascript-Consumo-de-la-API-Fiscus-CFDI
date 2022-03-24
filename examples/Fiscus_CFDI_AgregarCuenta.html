@@ -8,11 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Agregar Cuenta</title>
-    <link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
+    <link rel="stylesheet" type="text/css" href="./../lib/css/fiscus_cfdi.css" >
 </head>
 
 <body>
-    <img src="img/fiscus_cfdi.png"><br>
+    
 
     <input type="email" id="correo" placeholder="Correo" value="" required>
     <input type="password" id="password" placeholder="Contraseña" value="" required>
@@ -23,8 +23,11 @@
 
     <button id="agregar_cuenta_btn"> Dar de alta cuenta</button>
 
-    <script type="text/javascript" src="js/consumo_api.js"></script>
-    <script type="text/javascript" src="js/agregar_cuenta.js"></script>
+    <!--
+<script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
+-->
+<script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
+    <script type="text/javascript" src="./../lib/js/agregar_cuenta.js"></script>
     <script type="text/javascript">
         (function () {
             var consumo_api=new ConsumirApi();

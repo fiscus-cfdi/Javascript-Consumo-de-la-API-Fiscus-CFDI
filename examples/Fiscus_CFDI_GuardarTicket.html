@@ -8,11 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Timbrar Factura 3.3</title>
-    <link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
+    <link rel="stylesheet" type="text/css" href="./../lib/css/fiscus_cfdi.css" >
 </head>
 
 <body>
-    <img src="img/fiscus_cfdi.png"><br>
+    
     
     <div id="guardar_ticket">
         <div id="emisor_receptor">
@@ -364,8 +364,11 @@
             <img src="img/fiscus_cfdi_xml.png"></div>
     </div>
 
-    <script type="text/javascript" src="js/consumo_api.js"></script>
-    <script type="text/javascript" src="js/guardar_ticket.js"></script>
+    <!--
+<script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
+-->
+<script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
+    <script type="text/javascript" src="./../lib/js/guardar_ticket.js"></script>
     <script type="text/javascript">
         (function () {
             var consumo_api=new ConsumirApi();

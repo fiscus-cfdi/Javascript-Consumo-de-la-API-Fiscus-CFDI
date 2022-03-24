@@ -16,6 +16,12 @@ Para consumir la API es necesario primer obtener las credenciales correctas, par
 
 - **Paso 3.** Listo, ya puedes consumir la API de [Fiscus CFDI](https://fiscuscfdi.com) y timbrar CFDI, notas de crédito, notas de cargo, nómina, comprobante de pago, complementos, addendas, etc.
 
+# Importar 
+Importar los archivos JS y CSS para poder crear los objetos disponibles para consumir la API:
+```html
+<link rel="stylesheet" type="text/css" href="./../dist/fiscuscfdi.1.0.0.min.css">
+<script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
+```
 # MÉTODOS DISPONIBLES
 
 ## Agregar RFC
@@ -216,9 +222,12 @@ Se puede pasar un callback, para cuando el timbrado de la factura fué exitoso.
 ```html
 
 <div id="ContenedorTimbrar40"></div>
-<script type="text/javascript" src="js/generar_html_fiscuscfdi.js"></script>
-<script type="text/javascript" src="js/consumo_api.js"></script>
-<script type="text/javascript" src="js/timbrar_cfdi.js"></script>
+<script type="text/javascript" src="./../lib/js/generar_html_fiscuscfdi.js"></script>
+<!--
+<script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
+-->
+<script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
+<script type="text/javascript" src="./../lib/js/timbrar_cfdi.js"></script>
 <script type="text/javascript">
 		(function(){
       document.getElementById("ContenedorTimbrar40").innerHTML=GenerarHTMLFiscusCFDI.HTMLFacturar40();

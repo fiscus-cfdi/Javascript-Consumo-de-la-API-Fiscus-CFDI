@@ -1,0 +1,34 @@
+{
+    "name": "fiscuscfdi/javascript-consumo-de-la-api-fiscus-cfdi",
+    "version": "1.0.0",
+    "description": "Implementaciones rápidas para consumir la API de FiscusCFDI.com (facturación electrónica 4.0) con Javascript",
+    "main": "index.js",
+    "@comment scripts": {
+        "minificartodo": [
+          "Terminal: VERSION=1.0.0 npm run minificartodo"
+        ]
+    },
+    "scripts": {
+        "test": "echo \"Prueba corriendo exitosamente\" && exit 1",
+        "minificartodo":"VERSION=$VERSION npm run minificarjs && VERSION=$VERSION npm run minificarcss", 
+        "minificarjs": "terser ./lib/js/*.js  -o ./dist/fiscuscfdi-$VERSION.min.js",
+        "minificarcss": "cleancss -o ./dist/fiscuscfdi-$VERSION.min.css ./lib/css/fiscus_cfdi.css"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/issues"
+    },
+    "homepage": "https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI#readme",
+    "dependencies": {
+        "terser": "5.12.1",
+        "clean-css-cli":"5.5.2"  
+    }
+}
+
+ 

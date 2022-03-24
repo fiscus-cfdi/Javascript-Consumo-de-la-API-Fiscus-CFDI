@@ -8,7 +8,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Pre-factura</title>
-	<link rel="stylesheet" type="text/css" href="css/fiscus_cfdi.css" >
+	<link rel="stylesheet" type="text/css" href="./../lib/css/fiscus_cfdi.css" >
 </head>
 <body>
 	<input type="text" id="rfc_emisor" class="rfc_emisor" placeholder="RFC" value="IXS7607092R5">
@@ -16,8 +16,11 @@
 	
 	<button id="boton_obtener_prefactura">Obtener Pre-factura</button>
 
-	<script type="text/javascript" src="js/consumo_api.js"></script>
-	<script type="text/javascript" src="js/prefacturacion.js"></script>
+	<!--
+<script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
+-->
+<script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
+	<script type="text/javascript" src="./../lib/js/prefacturacion.js"></script>
 	<script type="text/javascript">
 		(function(){
 			var consumo_api=new ConsumirApi();
