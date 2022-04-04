@@ -29,14 +29,18 @@
     flex: auto;
     border-radius:0px;
 }
-#ComprobanteAtributosGeneral
+#ComprobanteAtributosGeneral > div
+{
+    text-align:center; 
+}
+#ComprobanteAtributosGeneral, #Totales
 {
     max-width:500px;
     display:block;
     margin:0 auto;
 }
 #DesgloseTotales
-{
+{ 
     text-align:right;
 }
 #DesgloseTotales > div > span
@@ -49,7 +53,26 @@
 {
     text-align:right;
 }
-/* Elementos Generales */
+/* Inicio Complemento de pago 2.0 */ 
+#Totales > div, #Pagos > div
+{
+    text-align:center;
+}
+#Pagos td,#Pagos th{
+    border-collapse: collapse;
+    border:1px solid black;
+    margin:0 auto;
+    width:80px;
+}
+#Pagos #agregar_pago
+{
+    display:inline-block;
+}
+/* Fin Complemento de pago 2.0 */
+
+
+
+/* Inicio Elementos Generales */
 input,
 select,
 button {
@@ -68,9 +91,33 @@ table, td, th{
     border: 1px solid black;
     margin:0 auto;
 }
-td > input, td > input{
-}
 td > input, td > select{
     width: 90%;
     height: 20px;
 }
+.ocultar
+{
+    display:none;
+}
+.centrar
+{
+    display:block;
+    margin:0 auto;
+}
+/* Fin Elementos Generales */
+
+
+/* Inicio de Media queries */
+@media (max-width: 800px) {
+    #EmisorReceptor, #SerieFolio {
+        display:block;
+        width:100%;
+        margin-left:0px;
+    }
+    table
+    {
+        display: block;
+        overflow-x: auto;
+    }
+}
+/* Fin de Media queries */

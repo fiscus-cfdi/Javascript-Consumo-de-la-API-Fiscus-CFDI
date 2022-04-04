@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Interfaz para timbrar a través de la API de Fiscus CFDI">
+	<meta name="keywords" content="Facturación, SAT, México, API">
+	<meta name="author" content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Generar HTML</title>
+	<link rel="stylesheet" type="text/css" href="./../lib/css/fiscus_cfdi.css" >
+</head>
+<body>
+    <div id="ContenedorTimbrar40"></div>
+	<script type="text/javascript" src="./../lib/js/generar_html_fiscuscfdi.js"></script>
+    <!--
+    <script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
+    -->
+    <script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
+	<script type="text/javascript" src="./../lib/js/timbrar_cfdi.js"></script>
+	<script type="text/javascript" src="./../lib/js/comprobante_pago20.js"></script>
+	<script type="text/javascript">
+		(function(){
+
+            document.getElementById("ContenedorTimbrar40").innerHTML=GenerarHTMLFiscusCFDI.HTMLFacturar40_ComplementoPago20();
+
+			var consumo_api=new ConsumirApi();
+            consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
+            consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+            consumo_api.setUrl("https://fiscuscfdi.com/index.php/Api?peticion=");
+            
+
+            var timbrarCfdi=new ComprobantePago20();
+            timbrarCfdi.setAmbiente("sandbox");
+            timbrarCfdi.setConsumirApi(consumo_api);
+            timbrarCfdi.setCallbackTimbradoExitoso(function(timbrado){
+                console.log(timbrado);
+            });            
+            try {
+                var cfdi = '{"Emisor":{"Rfc":"IXS7607092R5","Nombre":"INTERNACIONAL XIMBO Y SABORES SA DE CV","RegimenFiscal":"601"},"Receptor":{"Rfc":"KIJ0906199R1","Nombre":"KERNEL INDUSTIA JUGUETERA","UsoCFDI":"G03","DomicilioFiscalReceptor":"68224","RegimenFiscalReceptor":"601"},"Conceptos":{"Concepto":[{"Impuestos":{"Traslados":{"Traslado":[{"Base":1000,"Impuesto":"002","TipoFactor":"Tasa","TasaOCuota":0.16,"Importe":160}]}},"ClaveProdServ":"12352311","Cantidad":"1","ClaveUnidad":"E48","ObjetoImp":"02","Unidad":"E48","Descripcion":"Al\u00famina y otros compuestos de aluminio","ValorUnitario":"1000.0000","Importe":"1000.0000"}]},"Impuestos":{"Traslados":{"Traslado":[{"Base":1000,"Impuesto":"002","TipoFactor":"Tasa","TasaOCuota":0.16,"Importe":160}]},"TotalImpuestosTrasladados":160},"Version":"4.0","Folio":90,"Fecha":"2022-03-31T13:36:27","Sello":"@","FormaPago":"99","NoCertificado":"30001000000400002446","Certificado":"@","SubTotal":1000,"Moneda":"MXN","Total":1160,"TipoDeComprobante":"I","Exportacion":"01","MetodoPago":"PUE","LugarExpedicion":"64010","uuid":"DF14EC55-C5CC-4B77-BA11-5437369A1158","Complemento":{"TimbreFiscalDigital":{"FechaTimbrado":"2022-03-31T13:40:58","NoCertificadoSAT":"30001000000400002495","RfcProvCertif":"SPR190613I52","SelloCFD":"Q1QTRe4m65qgd8EAMIT8H8tjU3UG0rOlUxmirg8Xm5XmeMoOl8Gkmk2tsEpFGFOhQn\/1FNSqtBtstd1bSMoAu5qFUiLzAQb54enupx3fAIRTeonGhK++XN\/p\/yQ5KkPXsDWfkBaEVcF3dXtuTHMtcvyZ\/0XMioPlwHl4y7wC95AEX7+sOkdSxpdsR9B+mhyMOWtR6HF+XXVObuuj2cauR60JNcg1oAb46tiwIUiQ5hxziCwuGrYywTCsWEtEYFj9d8ioRbEbWhrtG4ta6tNwrzc7WDKFzr8MUYWUKe2Ij69DjAXYBj3otj6ZreXLhU9H6aaUn6A422POx\/f4I4clCg==","SelloSAT":"DAwhgSnIITCccetVuXhk74BszqZpIZdPbKFAcMOCqx4m9mqMonxOfg2jX9nhGWaeGPU\/xaQPQtmzEIrY47cdgW2mISfrNHhgtcqvR0SWZqWADSY6tdRUU0dJH2LHiNy0hNQqVAs+qAcVccwBv3fGt7IRSsxOVoVama1yCcoCycN\/jUhTllf8lYiZN4KHnOGAJZYZ9cO4Bnkr7PjjkwVEVaR8mcKPz4PDY5vQv5aq4kh\/82W0HGB+PijXkpKFZLngYniDEVCc7qXfRmRXC1WzEuDvuGl1bJps3CthBEsuM7kBpqdPq4oGKCHwbvN3Ky9u4X1MFETWFHEmRUut+Upb\/g==","UUID":"DF14EC55-C5CC-4B77-BA11-5437369A1158","Version":"1.1","schemaLocation":"http:\/\/www.sat.gob.mx\/TimbreFiscalDigital http:\/\/www.sat.gob.mx\/sitio_internet\/cfd\/TimbreFiscalDigital\/TimbreFiscalDigitalv11.xsd"}}}';
+                cfdi = JSON.parse(cfdi);
+                console.log(cfdi);
+                //timbrarCfdi.setCfdi(cfdi); 
+                //timbrarCfdi.setCfdiPago(cfdi); 
+                //timbrarCfdi.setCfdiPago(cfdi,true); 
+            } catch (error) {
+                console.log(error);
+            }
+		})();
+	</script>
+</body>
+</html>
