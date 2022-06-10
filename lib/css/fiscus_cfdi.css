@@ -53,6 +53,10 @@
 {
     text-align:right;
 }
+#contenedor_btns_timbrado
+{
+    display:flex;
+}
 /* Inicio Complemento de pago 2.0 */ 
 #Totales > div, #Pagos > div
 {
@@ -73,33 +77,33 @@
 
 
 /* Inicio Elementos Generales */
-input,
-select,
-button {
+#timbrar_cfdi input,
+#timbrar_cfdi select,
+#timbrar_cfdi button {
     display: block;
     width: 200px;
     height: 30px;
     margin: 0 auto;
 }
-img {
+#timbrar_cfdi img {
     width: 100px;
     border-radius: 50px;
     margin: 0 auto;
 }
-table, td, th{
+#timbrar_cfdi table, #timbrar_cfdi td, #timbrar_cfdi th{
     border-collapse: collapse;
     border: 1px solid black;
     margin:0 auto;
 }
-td > input, td > select{
+#timbrar_cfdi td > input,#timbrar_cfdi td > select{
     width: 90%;
     height: 20px;
 }
-.ocultar
+#timbrar_cfdi .ocultar
 {
     display:none;
 }
-.centrar
+#timbrar_cfdi .centrar
 {
     display:block;
     margin:0 auto;
@@ -114,7 +118,7 @@ td > input, td > select{
         width:100%;
         margin-left:0px;
     }
-    table
+    #timbrar_cfdi table
     {
         display: block;
         overflow-x: auto;

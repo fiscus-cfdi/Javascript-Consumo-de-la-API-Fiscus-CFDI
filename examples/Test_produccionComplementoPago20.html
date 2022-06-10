@@ -7,18 +7,16 @@
 	<meta name="author" content="Tecnología Globalbtek <globalbtek.com | fiscuscfdi.com>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Generar HTML</title>
-	<link rel="stylesheet" type="text/css" href="./../lib/css/fiscus_cfdi.css" >
+	<title>TEST</title>
+	<link rel="stylesheet" type="text/css" href="./../dist/fiscuscfdi-2.1.0.min.css" >
 </head>
 <body>
     <div id="ContenedorTimbrar40"></div>
-	<script type="text/javascript" src="./../lib/js/generar_html_fiscuscfdi.js"></script>
+    <script type="text/javascript" src="./../dist/fiscuscfdi-2.1.0.min.js"></script>
     <!--
-    <script type="text/javascript" src="./../dist/fiscuscfdi.1.0.0.min.js"></script>
-    -->
     <script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
 	<script type="text/javascript" src="./../lib/js/timbrar_cfdi.js"></script>
-	<script type="text/javascript" src="./../lib/js/comprobante_pago20.js"></script>
+	<script type="text/javascript" src="./../lib/js/comprobante_pago20.js"></script>-->
 	<script type="text/javascript">
 		(function(){
 
@@ -41,7 +39,7 @@
                 cfdi = JSON.parse(cfdi);
                 console.log(cfdi);
                 timbrarCfdi.setCfdi(cfdi); 
-                timbrarCfdi.setCfdiPago(cfdi); 
+                //timbrarCfdi.setCfdiPago(cfdi); 
                 //timbrarCfdi.setCfdiPago(cfdi,true); 
             } catch (error) {
                 console.log(error);

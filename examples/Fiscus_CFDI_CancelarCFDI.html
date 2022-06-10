@@ -15,6 +15,13 @@
     
 
     <input type="text" maxlength="36" id="uuid" placeholder="UUID" value="" required><br>
+    <select id="motivo_cancelacion">
+        <option value="01">01 - Comprobantes emitidos con errores con relación</option>
+        <option value="02">02 - Comprobantes emitidos con errores sin relación</option>
+        <option value="03">03 - No se llevó a cabo la operación</option>
+        <option value="04">04 - Operación nominativa relacionada en una factura global</option>
+    </select><br>
+    <input type="text" maxlength="36" id="folio_sustitucion" placeholder="Folio sustitucion" value="" required><br>
     <button id="cancelar_cfdi_btn"> Cancelar CFDI</button>
 
     <!--
@@ -23,7 +30,7 @@
 <script type="text/javascript" src="./../lib/js/consumo_api.js"></script>
     <script type="text/javascript" src="./../lib/js/cancelar_cfdi.js"></script>
     <script type="text/javascript">
-        (function () {
+        (function () { 
             var consumo_api=new ConsumirApi();
             consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
             consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");

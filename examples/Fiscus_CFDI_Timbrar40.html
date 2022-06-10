@@ -156,7 +156,6 @@
             <br>
             <button id="agregar_concepto">+ Agregar Concepto</button>
             <table>
-                <caption>Conceptos</caption>
                 <thead>
                         <tr>
                             <th>Acción</th>
@@ -561,7 +560,10 @@
         </div>
 
             <br>
-            <button id="TimbrarCFDI">Timbrar CFDI</button>
+            <div id="contenedor_btns_timbrado">
+                <button id="DescargarPrefactura">Descargar Pre-factura</button>
+                <button id="TimbrarCFDI">Timbrar</button>
+            </div>
             <p id="Errores"></p>
         </div>
     </div>
@@ -582,9 +584,9 @@
         (function () {
             var consumo_api=new ConsumirApi();
             consumo_api.setUsuario("TU_USUARIO_VA_AQUÍ");
-            consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ");
+            consumo_api.setPassword("TU_PASSWORD_VA_AQUÍ"); 
             consumo_api.setUrl("https://fiscuscfdi.com/index.php/Api?peticion=");
-            
+            consumo_api.setOmitirToken(false); 
 
 
             var timbrarCfdi=new TimbrarCFDI();
