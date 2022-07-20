@@ -26,7 +26,7 @@
     },
     "homepage": "https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI#readme",
     "dependencies": {
-        "terser": "5.12.1",
+        "terser": "5.14.2",
         "clean-css-cli":"5.5.2"  
     }
 }
