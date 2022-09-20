@@ -5,7 +5,7 @@
     "main": "index.js",
     "@comment scripts": {
         "minificartodo": [
-          "Terminal: VERSION=2.2.0 npm run minificartodo"
+          "Terminal: VERSION=2.3.0 npm run minificartodo"
         ]
     },
     "scripts": {
