@@ -1,6 +1,6 @@
 {
     "name": "javascript-consumo-de-la-api-fiscus-cfdi",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "description": "Implementaciones rápidas para consumir la API de FiscusCFDI.com (facturación electrónica 4.0) con Javascript. Creación de formularios de facturación.",
     "main": "index.js",
     "@comment scripts": {
