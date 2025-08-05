@@ -1,20 +1,20 @@
-![Fiscus CFDI](https://fiscuscfdi.com/assets/img/github/banner_2.jpg)
+![Fiscus CFDI](https://app.fiscus.mx/assets/img/github/banner_2.jpg)
 
 # INTRODUCCIÓN
 
-Ejemplo de consumo de la API de [Fiscus CFDI](https://fiscuscfdi.com) en **Javascript** para Facturar CFDI, notas de crédito, notas de cargo, nómina, comprobante de pago, complementos, addendas, etc.
+Ejemplo de consumo de la API de [Fiscus CFDI](https://app.fiscus.mx) en **Javascript** para Facturar CFDI, notas de crédito, notas de cargo, nómina, comprobante de pago, complementos, addendas, etc.
 
 ## Credenciales
 
-Para consumir la API es necesario primer obtener las credenciales correctas, para dar de alta tu cuenta en [Fiscus CFDI](https://fiscuscfdi.com) sigue los siguientes pasos:
+Para consumir la API es necesario primer obtener las credenciales correctas, para dar de alta tu cuenta en [Fiscus CFDI](https://app.fiscus.mx) sigue los siguientes pasos:
 
-- **Paso 1.** Regístrate en [Fiscus CFDI](https://fiscuscfdi.com) (y recibe 10 folios gratis) en la siguiente url: https://fiscuscfdi.com/index.php/Registro.
-  - ![Registro en Fiscus CFDI](https://fiscuscfdi.com/assets/img/github/registro.png)
+- **Paso 1.** Regístrate en [Fiscus CFDI](https://app.fiscus.mx) (y recibe 10 folios gratis) en la siguiente url: https://app.fiscus.mx/index.php/Registro.
+  - ![Registro en Fiscus CFDI](https://app.fiscus.mx/assets/img/github/registro.png)
 
-* **Paso 2.** Obtén las credenciales para poder consumir la API en: https://fiscuscfdi.com/index.php/CuentaApi.
-  - ![Credenciales para consumir API de Fiscus CFDI](https://fiscuscfdi.com/assets/img/github/credenciales.png)
+* **Paso 2.** Obtén las credenciales para poder consumir la API en: https://app.fiscus.mx/index.php/CuentaApi.
+  - ![Credenciales para consumir API de Fiscus CFDI](https://app.fiscus.mx/assets/img/github/credenciales.png)
 
-- **Paso 3.** Listo, ya puedes consumir la API de [Fiscus CFDI](https://fiscuscfdi.com) y timbrar CFDI, notas de crédito, notas de cargo, nómina, comprobante de pago, complementos, addendas, etc.
+- **Paso 3.** Listo, ya puedes consumir la API de [Fiscus CFDI](https://app.fiscus.mx) y timbrar CFDI, notas de crédito, notas de cargo, nómina, comprobante de pago, complementos, addendas, etc.
 
 # Importar 
 Importar los archivos JS y CSS para poder crear los objetos disponibles para consumir la API:
@@ -70,7 +70,7 @@ cancelarCFDI.setConsumirApi(consumo_api);
 
 ## Obtener Series de un RFC
 
-Para poder generar una serie por medio de la [API de Fiscus CFDI](http://fiscuscfdi.com/API_Facturacion/docs/) se necesita primero tener un número de serie relacionado a su RFC; Al llamar a este endpoint se le retornarán todos los números de serie asociados a su RFC y en caso de no tener ninguno se le asignará uno. El ejemplo para generar un número de serie está en la siguiente [liga](https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/blob/master/Fiscus_CFDI_ObtenerSeries.html).
+Para poder generar una serie por medio de la [API de Fiscus CFDI](http://app.fiscus.mx/API_Facturacion/docs/) se necesita primero tener un número de serie relacionado a su RFC; Al llamar a este endpoint se le retornarán todos los números de serie asociados a su RFC y en caso de no tener ninguno se le asignará uno. El ejemplo para generar un número de serie está en la siguiente [liga](https://github.com/fiscus-cfdi/Javascript-Consumo-de-la-API-Fiscus-CFDI/blob/master/Fiscus_CFDI_ObtenerSeries.html).
 
 ```javascript
 var consumo_api = new ConsumirApi();
@@ -178,7 +178,7 @@ obtener_rfcs.setConsumirApi(consumo_api);
 ```
 
 ## Utilizar Proxy
-Puedes manejar las peticiones del lado del servidor (tu servidor) y así ocultar las credenciales de API (usuario/contraseña), para ello puedes instalar la librería de PHP para consumir la API de fiscuscfdi.com (https://github.com/fiscus-cfdi/api-fiscuscfdi-php), y configurar el objeto  ConsumirApi de la siguiente manera:
+Puedes manejar las peticiones del lado del servidor (tu servidor) y así ocultar las credenciales de API (usuario/contraseña), para ello puedes instalar la librería de PHP para consumir la API de app.fiscus.mx (https://github.com/fiscus-cfdi/api-fiscuscfdi-php), y configurar el objeto  ConsumirApi de la siguiente manera:
 
 ```javascript
 var consumo_api = new ConsumirApi();
